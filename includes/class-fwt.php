@@ -29,9 +29,9 @@ class Fwt
         $this->plugin_name = 'fwt';
         $this->version = '0.0.1';
         $this->load_dependencies();
-        //$this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
+        $this->define_api_hooks();
     }
 
     /**
@@ -40,34 +40,45 @@ class Fwt
     private function load_dependencies()
     {
         require_once FWT_DIR . 'includes/class-fwt-loader.php';
-        require_once FWT_DIR . 'admin/class-fwt-admin.php';
-        require_once FWT_DIR . 'public/class-fwt-public.php';
-
         $this->loader = new Fwt_Loader();
     }
 
     /**
      * Register all of the hooks related to the admin area functionality of the plugin.
      */
-    private function define_admin_hooks() {
-        $plugin_admin = new Fwt_Admin( $this->get_plugin_name(), $this->get_version() );
-        //$this->get_loader()->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-        //$this->get_loader()->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+    private function define_admin_hooks()
+    {
+        require_once FWT_DIR . 'admin/class-fwt-admin.php';
+        $plugin = new Fwt_Admin( $this->get_plugin_name(), $this->get_version() );
+        //$this->get_loader()->add_action( 'admin_enqueue_scripts', $plugin, 'enqueue_styles' );
+        //$this->get_loader()->add_action( 'admin_enqueue_scripts', $plugin, 'enqueue_scripts' );
     }
 
     /**
      * Register all of the hooks related to the public-facing functionality of the plugin.
      */
-    private function define_public_hooks() {
-        $plugin_public = new Fwt_Public( $this->get_plugin_name(), $this->get_version() );
-        //$this->get_loader()->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-        //$this->get_loader()->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+    private function define_public_hooks()
+    {
+        require_once FWT_DIR . 'public/class-fwt-public.php';
+        $plugin = new Fwt_Public( $this->get_plugin_name(), $this->get_version() );
+        //$this->get_loader()->add_action( 'wp_enqueue_scripts', $plugin, 'enqueue_styles' );
+        //$this->get_loader()->add_action( 'wp_enqueue_scripts', $plugin, 'enqueue_scripts' );
+    }
+
+    /**
+     * Register all of the hooks related to the api functionality of the plugin.
+     */
+    private function define_api_hooks()
+    {
+        require_once FWT_DIR . 'api/class-fwt-api.php';
+        $plugin = new Fwt_Api($this->get_plugin_name(), $this->get_version());
     }
 
     /**
      * Run the loader to execute all of the hooks with WordPress.
      */
-    public function run() {
+    public function run()
+    {
         $this->get_loader()->run();
     }
 
