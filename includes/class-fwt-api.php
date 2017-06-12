@@ -27,7 +27,7 @@ class Fwt_Api
 
     public function sync()
     {
-        print "OK";
+        return true;
         //$project = $this->api('project');
     }
 

@@ -24,7 +24,7 @@
                 </th>
 
                 <td>
-                    <button class="button button-danger">Export to fn.com</button>
+                    <a href="?page=fwt-settings&amp;action=sync" class="button button-danger">Export to fn.com</a>
                 </td>
             </tr>
         </tbody>

@@ -47,16 +47,23 @@ class Fwt_Admin
             case 'dashboard':
                 $this->render('dashboard');
                 break;
+
             case 'add_key':
                 $this->add_api_key();
                 break;
+                
+            case 'sync':
+                $this->sync();
+                break;
+
             default: 
                 $this->render('dashboard');
                 break;
         }
     }
 
-    public function render($page){
+    public function render($page)
+    {
         $file = FWT_DIR . 'admin/views/' . strtolower($page) . '.view.php';
         
         if(file_exists($file)){
@@ -66,9 +73,19 @@ class Fwt_Admin
         }
     }
 
-    public function add_api_key(){
+    public function add_api_key()
+    {
         if( isset($_POST['api_key']) ){
-            add_option('fwt_api_key',   $_POST['api_key']);
+            $this->config->set_options($_POST['api_key']);
+        }
+    }
+
+    public function sync()
+    {
+        if( $this->api->sync() ){
+            echo 'Result is ok';
+        }else{
+            echo 'sync error';
         }
     }
 }
