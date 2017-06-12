@@ -24,4 +24,9 @@ class Fwt_Public
         $this->plugin_name = $plugin_name;
         $this->version = $version;
     }
+
+    public function the_content($content)
+    {
+         return 'TEST: ' . $content;
+    }
 }

@@ -61,8 +61,8 @@ class Fwt
     {
         require_once FWT_DIR . 'public/class-fwt-public.php';
         $plugin = new Fwt_Public( $this->get_plugin_name(), $this->get_version() );
-        //$this->get_loader()->add_action( 'wp_enqueue_scripts', $plugin, 'enqueue_styles' );
-        //$this->get_loader()->add_action( 'wp_enqueue_scripts', $plugin, 'enqueue_scripts' );
+        $this->get_loader()->add_action( 'the_content', $plugin, 'the_content' );
+        $this->get_loader()->add_action( 'the_title', $plugin, 'the_content' );
     }
 
     /**
