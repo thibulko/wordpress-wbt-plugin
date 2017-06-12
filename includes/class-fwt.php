@@ -50,7 +50,7 @@ class Fwt
     {
         require_once FWT_DIR . 'admin/class-fwt-admin.php';
         $plugin = new Fwt_Admin( $this->get_plugin_name(), $this->get_version() );
-        //$this->get_loader()->add_action( 'admin_enqueue_scripts', $plugin, 'enqueue_styles' );
+        $this->get_loader()->add_action( 'admin_menu', $plugin, 'init_menu' );
         //$this->get_loader()->add_action( 'admin_enqueue_scripts', $plugin, 'enqueue_scripts' );
     }
 
