@@ -6,14 +6,13 @@
 
 class Fwt_Api
 {
-    const FWT_API_URL = 'http://127.0.0.1./api/v1/';
+    const API_URL = 'http://192.168.88.149:8080/api/v2/';
 
     protected $api_key = '';
 
-    protected $headers = [
-        'Content-Type: application/x-www-form-urlencoded',
-        'Authorization: bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImlzcyI6Imh0dHA6Ly8xOTIuMTY4Ljg4LjE0OTo4MDgwL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNDk3MjY3MTYzLCJleHAiOjE1MDI0NTExNjMsIm5iZiI6MTQ5NzI2NzE2MywianRpIjoiTXNIVVljS0VuYlQ5ckV4aiJ9.PCfZX62Tp2Fgj-9_Roe80U0TeqAIxJo1JjBv6CRQTKM',
-    ];
+    protected $errors;
+
+    protected $params = array();
 
     private $config;
 
@@ -27,35 +26,29 @@ class Fwt_Api
 
     public function sync()
     {
-        return true;
-        //$project = $this->api('project');
-    }
+        $project = $this->api_get('project/56');
 
-    public function api($type, $method = 'GET', $params = [])
-    {
-        $url = rtrim(self::FWT_API_URL, '/') . '/' . $type . '/?api_key=' . $this->get_api_key();
-        $body = $this->get_content($url, $method, $params);
-        return json_decode($body);
-    }
-
-    public function get_content($url, $method = 'GET', $params = [])
-    {
-        if (function_exists('curl_init')) {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-            if (!empty($this->headers)) {
-                curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers);
-            }
-
-            $body = curl_exec($curl);
-            curl_close($curl);
-        } else {
-            $body = file_get_contents($url);
+        if (isset($project['data']['language'])) {
+            $this->config->set_option('default_language', $project['data']['language']);
         }
 
-        return $body;
+        if (isset($project['data']['languages'])) {
+            $this->config->set_option('languages', $project['data']['languages']);
+        }
+
+        return true;
+    }
+
+    public function api_get($type, $params = [])
+    {
+        $url = rtrim(self::API_URL, '/') . '/' . $type;
+        $request = wp_remote_get($url, array_merge_recursive($this->params, $params));
+
+        if( is_array($request) ) {
+            return json_decode($request['body'], true);
+        }
+
+        return $request;
     }
 
     public function get_api_key()
