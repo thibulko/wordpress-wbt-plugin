@@ -21,6 +21,8 @@ class Fwt
      */
     protected $version;
 
+    protected $config;
+
     /**
      * Define the core functionality of the plugin.
      */
@@ -41,6 +43,9 @@ class Fwt
     {
         require_once FWT_DIR . 'includes/class-fwt-loader.php';
         $this->loader = new Fwt_Loader();
+
+        require_once FWT_DIR . 'includes/class-fwt-config.php';
+        $this->config = new Fwt_Config();
     }
 
     /**
@@ -49,7 +54,7 @@ class Fwt
     private function define_admin_hooks()
     {
         require_once FWT_DIR . 'admin/class-fwt-admin.php';
-        $plugin = new Fwt_Admin( $this->get_plugin_name(), $this->get_version() );
+        $plugin = new Fwt_Admin( $this->config, $this->get_plugin_name(), $this->get_version() );
         $this->get_loader()->add_action( 'admin_menu', $plugin, 'init_menu' );
         //$this->get_loader()->add_action( 'admin_enqueue_scripts', $plugin, 'enqueue_scripts' );
     }
@@ -60,9 +65,9 @@ class Fwt
     private function define_public_hooks()
     {
         require_once FWT_DIR . 'public/class-fwt-public.php';
-        $plugin = new Fwt_Public( $this->get_plugin_name(), $this->get_version() );
-        $this->get_loader()->add_action( 'the_content', $plugin, 'the_content' );
-        $this->get_loader()->add_action( 'the_title', $plugin, 'the_content' );
+        $plugin = new Fwt_Public( $this->config, $this->get_plugin_name(), $this->get_version() );
+        //$this->get_loader()->add_action( 'the_content', $plugin, 'the_content' );
+        //$this->get_loader()->add_action( 'the_title', $plugin, 'the_content' );
     }
 
     /**
@@ -103,43 +108,5 @@ class Fwt
     public function get_version()
     {
         return $this->version;
-    }
-
-    public function set_option($name, $value = null)
-    {
-        $options = $this->get_options();
-        $options[$name] = $value;
-        $this->set_options($options);
-    }
-
-    public function set_options($value = [])
-    {
-        add_option(FWT_OPTION_NAME, $value);
-    }
-
-    public function get_option($name, $default = null)
-    {
-        return $this->get_options($name, $default);
-    }
-
-    public function get_options($name = null, $default = null)
-    {
-        $options = get_option(FWT_OPTION_NAME);
-
-        if (!empty($options)) {
-            $options = json_decode($options, true);
-
-            if (null !== $name) {
-                if (isset($options[$name])) {
-                    return $options[$name];
-                }
-
-                return $default;
-            }
-
-            return $options;
-        }
-
-        return $default;
     }
 }

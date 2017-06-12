@@ -16,11 +16,14 @@ class Fwt_Public
      */
     private $version;
 
+    private $config;
+
     /**
      * Initialize the class and set its properties.
      */
-    public function __construct( $plugin_name, $version )
+    public function __construct( $config, $plugin_name, $version )
     {
+        $this->config = $config;
         $this->plugin_name = $plugin_name;
         $this->version = $version;
     }
