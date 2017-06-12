@@ -76,7 +76,7 @@ class Fwt_Admin
     public function add_api_key()
     {
         if( isset($_POST['api_key']) ){
-            $this->config->set_options($_POST['api_key']);
+            $this->config->set_option('api_key', $_POST['api_key']);
         }
     }
 
