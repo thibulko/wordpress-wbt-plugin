@@ -41,6 +41,9 @@ class Fwt_Admin
             case 'dashboard':
                 $this->render('dashboard');
                 break;
+            case 'add_key':
+                $this->add_api_key();
+                break;
             default: 
                 $this->render('dashboard');
                 break;
@@ -48,6 +51,18 @@ class Fwt_Admin
     }
 
     public function render($page){
-        echo $page;
+        $file = FWT_DIR . 'admin/views/' . strtolower($page) . '.view.php';
+        
+        if(file_exists($file)){
+            include $file;
+        }else{
+            exit(' Template not found!');
+        }
+    }
+
+    public function add_api_key(){
+        if( isset($_POST['api_key']) ){
+            add_option('fwt_api_key',   $_POST['api_key']);
+        }
     }
 }
