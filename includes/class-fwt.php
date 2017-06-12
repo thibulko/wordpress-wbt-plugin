@@ -23,6 +23,8 @@ class Fwt
 
     protected $config;
 
+    protected $api;
+
     /**
      * Define the core functionality of the plugin.
      */
@@ -33,7 +35,6 @@ class Fwt
         $this->load_dependencies();
         $this->define_admin_hooks();
         $this->define_public_hooks();
-        $this->define_api_hooks();
     }
 
     /**
@@ -46,6 +47,9 @@ class Fwt
 
         require_once FWT_DIR . 'includes/class-fwt-config.php';
         $this->config = new Fwt_Config();
+
+        require_once FWT_DIR . 'includes/class-fwt-api.php';
+        $this->api = new Fwt_Api( $this->config);
     }
 
     /**
@@ -54,7 +58,7 @@ class Fwt
     private function define_admin_hooks()
     {
         require_once FWT_DIR . 'admin/class-fwt-admin.php';
-        $plugin = new Fwt_Admin( $this->config, $this->get_plugin_name(), $this->get_version() );
+        $plugin = new Fwt_Admin( $this->get_config(), $this->get_api(), $this->get_plugin_name(), $this->get_version() );
         $this->get_loader()->add_action( 'admin_menu', $plugin, 'init_menu' );
         //$this->get_loader()->add_action( 'admin_enqueue_scripts', $plugin, 'enqueue_scripts' );
     }
@@ -65,18 +69,9 @@ class Fwt
     private function define_public_hooks()
     {
         require_once FWT_DIR . 'public/class-fwt-public.php';
-        $plugin = new Fwt_Public( $this->config, $this->get_plugin_name(), $this->get_version() );
+        $plugin = new Fwt_Public( $this->get_config(), $this->get_api(), $this->get_plugin_name(), $this->get_version() );
         //$this->get_loader()->add_action( 'the_content', $plugin, 'the_content' );
         //$this->get_loader()->add_action( 'the_title', $plugin, 'the_content' );
-    }
-
-    /**
-     * Register all of the hooks related to the api functionality of the plugin.
-     */
-    private function define_api_hooks()
-    {
-        require_once FWT_DIR . 'api/class-fwt-api.php';
-        $plugin = new Fwt_Api($this->get_plugin_name(), $this->get_version());
     }
 
     /**
@@ -108,5 +103,15 @@ class Fwt
     public function get_version()
     {
         return $this->version;
+    }
+
+    public function get_config()
+    {
+        return $this->config;
+    }
+
+    public function get_api()
+    {
+        return $this->api;
     }
 }

@@ -17,12 +17,15 @@ class Fwt_Admin
 
     private $config;
 
+    private $api;
+
     /**
      * Initialize the class and set its properties.
      */
-    public function __construct( $config, $plugin_name, $version )
+    public function __construct( $config, $api, $plugin_name, $version )
     {
         $this->config = $config;
+        $this->api = $api;
         $this->plugin_name = $plugin_name;
         $this->version = $version;
     }

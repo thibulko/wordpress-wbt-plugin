@@ -15,28 +15,20 @@ class Fwt_Api
         'Authorization: bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImlzcyI6Imh0dHA6Ly8xOTIuMTY4Ljg4LjE0OTo4MDgwL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNDk3MjY3MTYzLCJleHAiOjE1MDI0NTExNjMsIm5iZiI6MTQ5NzI2NzE2MywianRpIjoiTXNIVVljS0VuYlQ5ckV4aiJ9.PCfZX62Tp2Fgj-9_Roe80U0TeqAIxJo1JjBv6CRQTKM',
     ];
 
-    /**
-     * The ID of this plugin.
-     */
-    private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     */
-    private $version;
+    private $config;
 
     /**
      * Initialize the class and set its properties.
      */
-    public function __construct( $plugin_name, $version )
+    public function __construct( $config )
     {
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
+        $this->config = $config;
     }
 
     public function sync()
     {
-        $project = $this->api('project');
+        print "OK";
+        //$project = $this->api('project');
     }
 
     public function api($type, $method = 'GET', $params = [])
