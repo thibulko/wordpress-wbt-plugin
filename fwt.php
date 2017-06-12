@@ -12,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 define( 'FWT_DIR', realpath(dirname( __FILE__ )) . '/' );
-
+define( 'FWT_OPTION_NAME', 'fwt_project_params' );
 /**
  * The code that runs during plugin activation.
  */
