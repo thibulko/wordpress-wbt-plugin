@@ -1,17 +1,43 @@
 <?php
-/*
-  Plugin Name: Future WEB Translator
-  Version: 0.0.1
+/**
+ * The plugin bootstrap file
+ *
+ * Plugin Name: Future WEB Translator
+ * Version: 0.0.1
 */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // don't access directly
-};
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 
-define( 'FWT_VERSION', '0.0.1' );
-define( 'FWT_FILE', __FILE__ );
-define( 'FWT_BASENAME', plugin_basename( FWT_FILE ) );
-define( 'FWT_DIR', dirname( FWT_FILE ) );
+define( 'FWT_DIR', realpath(dirname( __FILE__ )) . '/' );
 
-require_once( FWT_DIR . '/inc/class.fwt.php' );
-add_action( 'init', array( 'Fwt', 'init' ) );
+/**
+ * The code that runs during plugin activation.
+ */
+function activate_fwt() {
+    require_once FWT_DIR . 'includes/class-fwt-activator.php';
+    Fwt_Activator::activate();
+}
+
+/**
+ * The code that runs during plugin deactivation.
+ */
+function deactivate_fwt() {
+    require_once FWT_DIR . 'includes/class-fwt-deactivator.php';
+    Fwt_Deactivator::deactivate();
+}
+
+/**
+ * Begins execution of the plugin.
+ */
+function run_fwt() {
+    require_once FWT_DIR . 'includes/class-fwt.php';
+    $plugin = new Fwt();
+    $plugin->run();
+}
+
+register_activation_hook( FWT_DIR, 'activate_fwt' );
+register_deactivation_hook( FWT_DIR, 'deactivate_fwt' );
+run_fwt();
