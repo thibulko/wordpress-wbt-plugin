@@ -23,7 +23,7 @@ class Fwt_Config
     {
         $options = get_option(FWT_OPTION_NAME);
 
-        if (!empty($options)) {
+        if ( (!empty($options)) && ( !is_array($options) ) ) {
             $options = json_decode($options, true);
 
             if (null !== $name) {
