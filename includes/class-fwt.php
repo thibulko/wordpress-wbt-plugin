@@ -25,7 +25,7 @@ class Fwt
 
     protected $api;
 
-    protected $switcher_widget;
+    protected $widget_switcher;
 
     private $translate;
 
@@ -58,8 +58,8 @@ class Fwt
         require_once FWT_DIR . 'includes/class-fwt-api.php';
         $this->api = new Fwt_Api( $this->config, $this->translate );
 
-        require_once FWT_DIR . 'widgets/fwt-switcher-widget.php';
-        $this->switcher_widget = new Fwt_switcher_widget( $this->config );
+        require_once FWT_DIR . 'widgets/fwt-widget-switcher.php';
+        $this->widget_switcher = new Fwt_Widget_Switcher( $this->config );
     }
 
     /**
@@ -68,7 +68,7 @@ class Fwt
     private function define_admin_hooks()
     {
         require_once FWT_DIR . 'admin/class-fwt-admin.php';
-        $plugin = new Fwt_Admin( $this->get_config(), $this->get_api(), $this->switcher_widget, $this->get_plugin_name(), $this->get_version() );
+        $plugin = new Fwt_Admin( $this->get_config(), $this->get_api(), $this->get_plugin_name(), $this->get_version() );
         $this->get_loader()->add_action( 'admin_menu', $plugin, 'init_menu' );
     }
 
@@ -78,7 +78,7 @@ class Fwt
     private function define_public_hooks()
     {
         require_once FWT_DIR . 'public/class-fwt-public.php';
-        $plugin = new Fwt_Public( $this->get_config(), $this->get_api(), $this->get_switcher_widget(), $this->get_plugin_name(), $this->get_version() );
+        $plugin = new Fwt_Public( $this->get_config(), $this->get_api(), $this->get_widget_switcher(), $this->get_plugin_name(), $this->get_version() );
         $this->get_loader()->add_action( 'widgets_init', $plugin, 'define_widgets' );
         //$this->get_loader()->add_action( 'the_content', $plugin, 'the_content' );
         //$this->get_loader()->add_action( 'the_title', $plugin, 'the_content' );
@@ -125,8 +125,8 @@ class Fwt
         return $this->api;
     }
 
-    public function get_switcher_widget()
+    public function get_widget_switcher()
     {
-        return $this->switcher_widget;
+        return $this->widget_switcher;
     }
 }
