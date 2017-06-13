@@ -56,12 +56,10 @@ class Fwt
         $this->translate = new Fwt_Translate();
 
         require_once FWT_DIR . 'includes/class-fwt-api.php';
-        $this->api = new Fwt_Api( $this->config );
+        $this->api = new Fwt_Api( $this->config, $this->translate );
 
         require_once FWT_DIR . 'widgets/fwt-switcher-widget.php';
         $this->switcher_widget = new Fwt_switcher_widget( $this->config );
-
-        $this->api = new Fwt_Api( $this->config, $this->translate);
     }
 
     /**
