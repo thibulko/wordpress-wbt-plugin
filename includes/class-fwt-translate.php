@@ -2,13 +2,58 @@
 
 class Fwt_Translate
 {
+    private $config;
+
+    private $languages = [];
+
+    public function __construct( $config )
+    {
+        $this->config = $config;
+        $this->languages = $this->get_config()->get_languages();
+    }
+
+    public function get_config()
+    {
+        return $this->config;
+    }
 
     /**
-     *  Core functions
+     *  Join functions
+     *
+     * @param $texts
+     * @return string
      */
-    function split($text, $languages) {
+    public function join($texts)
+    {
+        if (!is_array($texts)) {
+            return $texts;
+        }
+
+        $text = '';
+
+        foreach ($texts as $lang => $val) {
+            if (!empty($val)) {
+                $text .= '[:' . $lang . ']' . $val;
+            }
+        }
+
+        if (strlen($text) > 0) {
+            $text .= '[:]';
+        }
+
+        return $text;
+    }
+
+    /**
+     *  Split functions
+     *
+     * @param $text
+     * @return array
+     */
+    function split($text)
+    {
         $blocks = $this->get_language_blocks($text);
-        return $this->split_blocks($blocks, $languages);
+        return $this->split_blocks($blocks);
     }
 
     public function get_language_blocks($text)
@@ -17,10 +62,12 @@ class Fwt_Translate
         return preg_split($split_regex, $text, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
     }
 
-    public function split_blocks($blocks, $languages = [])
+    public function split_blocks($blocks)
     {
         $result = array();
         $current_language = false;
+
+        $languages = $this->languages;
 
         foreach($languages as $language) {
             $result[$language] = '';
@@ -50,7 +97,10 @@ class Fwt_Translate
                 default:
                     // correctly categorize text block
                     if ($current_language) {
-                        if (!isset($result[$current_language])) $result[$current_language] = '';
+                        if (!isset($result[$current_language])) {
+                            $result[$current_language] = '';
+                        }
+
                         $result[$current_language] .= $block;
                         $current_language = false;
                     } else {
@@ -108,6 +158,32 @@ class Fwt_Translate
 
         foreach($result as $lang => $text){
             $result[$lang] = trim($text);
+        }
+
+        return $result;
+    }
+
+    public function get_posts($language = null)
+    {
+        $query = new WP_Query();
+
+        $posts = $query->query(array(
+            'numberposts' => '-1'
+        ));
+
+        $result = array();
+
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                $post = $this->split($post->post_content);
+                $title = $this->split($post->post_title);
+
+                $result[] = array (
+                    'ID' => $post->ID,
+                    'post_content' => !empty($language) ? isset($post[$language]) ? $post[$language] : '' : $post,
+                    'post_title' => !empty($language) ? isset($title[$language]) ? $title[$language] : '' : $title,
+                );
+            }
         }
 
         return $result;

@@ -32,7 +32,7 @@ class Fwt_Api
 
     public function sync()
     {
-        $project = $this->remote_get('project');
+        /*$project = $this->remote_get('project');
 
         if (isset($project['data']['language'])) {
             $this->config->set_option('default_language', $project['data']['language']);
@@ -42,28 +42,49 @@ class Fwt_Api
             $this->config->set_option('languages', $project['data']['languages']);
         }
 
-        $this->config->set_option('updated_at', time());
+        $this->config->set_option('updated_at', time());*/
+
+        $this->create_tasks();
     }
 
     public function refresh()
     {
-        $posts = get_posts(array('numberposts' => '-1'));
-        $languages = $this->config->get_languages();
+        /*$posts = $this->translate->get_posts();
 
-        foreach ($posts as $post) {
-            $content = $this->translate->split($post->post_content, $languages);
-            $title = $this->translate->split($post->post_title, $languages);
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                foreach ($post as $k => $v) {
+                    $post[$k] = $this->translate->join($v);
+                }
 
-            $row = [
-                'ID' => $post->id,
-                'post_content' => $content,
-                'post_title' => $title,
-            ];
-            $this->dump($row);
-            //wp_update_post( $row );
+                wp_update_post($post);
+            }
+        }*/
+    }
+
+    public function create_tasks()
+    {
+        $default_language = $this->config->get_option('default_language');
+
+        $posts = $this->translate->get_posts($default_language['code']);
+
+        if (!empty($posts)) {
+$this->dump($posts);
+
+            $args = array(
+                'method' => 'POST',
+                'body' => array(),
+            );
+
+            foreach ($posts as $post) {
+                $args['body'] = array(
+                    'name' => '',
+                    'value' => $post[]
+                );
+
+                $this->remote_get('project/' . $this->get_api_key() . '/tasks/create', $args);
+            }
         }
-
-        return true;
     }
 
     public function remote_get($type, $params = [])
