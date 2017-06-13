@@ -75,17 +75,20 @@ class Fwt_Admin
 
     public function add_api_key()
     {
-        if( isset($_POST['api_key']) ){
+        if( !empty($_POST['api_key']) ){
             $this->config->set_option('api_key', $_POST['api_key']);
+            $this->api->sync();
         }
     }
 
     public function sync()
     {
-        if( $this->api->sync() ){
+        $this->api->refresh();
+
+        /*if( $this->api->sync() ){
             echo 'Result is ok';
         }else{
             echo 'sync error';
-        }
+        }*/
     }
 }
