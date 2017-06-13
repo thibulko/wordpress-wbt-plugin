@@ -36,16 +36,10 @@ class Fwt_Widget_Switcher extends WP_Widget {
     }
 
     private function get_link(){
-        $pageURL = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
-        if ($_SERVER["SERVER_PORT"] != "80")
-        {
-            $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-        } 
-        else 
-        {
-            $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-        }
-        return $pageURL;
+        global $wp;
+        $current_url = home_url(add_query_arg(array(),$wp->request));
+
+        return $current_url;
     }
 
 
