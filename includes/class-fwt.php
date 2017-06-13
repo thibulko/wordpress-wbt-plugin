@@ -27,6 +27,8 @@ class Fwt
 
     protected $switcher_widget;
 
+    private $translate;
+
     /**
      * Define the core functionality of the plugin.
      */
@@ -50,11 +52,16 @@ class Fwt
         require_once FWT_DIR . 'includes/class-fwt-config.php';
         $this->config = new Fwt_Config();
 
+        require_once FWT_DIR . 'includes/class-fwt-translate.php';
+        $this->translate = new Fwt_Translate();
+
         require_once FWT_DIR . 'includes/class-fwt-api.php';
         $this->api = new Fwt_Api( $this->config );
 
         require_once FWT_DIR . 'widgets/fwt-switcher-widget.php';
         $this->switcher_widget = new Fwt_switcher_widget( $this->config );
+
+        $this->api = new Fwt_Api( $this->config, $this->translate);
     }
 
     /**
@@ -65,7 +72,6 @@ class Fwt
         require_once FWT_DIR . 'admin/class-fwt-admin.php';
         $plugin = new Fwt_Admin( $this->get_config(), $this->get_api(), $this->switcher_widget, $this->get_plugin_name(), $this->get_version() );
         $this->get_loader()->add_action( 'admin_menu', $plugin, 'init_menu' );
-        //$this->get_loader()->add_action( 'admin_enqueue_scripts', $plugin, 'enqueue_scripts' );
     }
 
     /**
