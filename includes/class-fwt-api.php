@@ -66,37 +66,56 @@ class Fwt_Api
     {
         $default_language = $this->config->get_option('default_language');
 
-        $posts = $this->translate->get_posts($default_language['code']);
+        $posts = $this->translate->get_posts();
 
         if (!empty($posts)) {
-$this->dump($posts);
-
-            $args = array(
-                'method' => 'POST',
-                'body' => array(),
-            );
-
             foreach ($posts as $post) {
-                $args['body'] = array(
-                    'name' => '',
-                    'value' => $post[]
-                );
+                if (!empty($post['post_content'][$default_language['code']])) {
+                    $args = array(
+                        'method' => 'POST',
+                        'body' => array(
+                            'name' => 'post_' . $post['ID'] . '_content',
+                            'value' => $post['post_content'][$default_language['code']],
+                        )
+                    );
 
-                $this->remote_get('project/' . $this->get_api_key() . '/tasks/create', $args);
+                    $this->remote_request('project/' . $this->get_api_key() . '/tasks/create', $args);
+                }
+
+                if (!empty($post['post_title'][$default_language['code']])) {
+                    $args = array(
+                        'method' => 'POST',
+                        'data' => array(
+                            'name' => 'post_' . $post['ID'] . '_title',
+                            'value' => $post['post_title'][$default_language['code']],
+                        )
+                    );
+
+                    $this->remote_request('project/' . $this->get_api_key() . '/tasks/create', $args);
+                }
             }
         }
     }
 
-    public function remote_get($type, $params = [])
+    public function remote_request($type, $params = [])
     {
-        $url = rtrim(self::API_URL, '/') . '/' . $type . '/' . $this->get_api_key();
-        $request = wp_remote_get($url, array_merge_recursive($this->params, $params));
+        $url = rtrim(self::API_URL, '/') . '/' . $type;
 
-        if( is_array($request) ) {
-            return json_decode($request['body'], true);
+        $request = wp_remote_request($url, array_merge($this->params, $params));
+
+        $code = wp_remote_retrieve_response_code( $request );
+        $mesg = wp_remote_retrieve_response_message( $request );
+        $body = json_decode(wp_remote_retrieve_body( $request ));
+
+        if ( 200 != $code && !empty( $mesg ) ) {
+            return new WP_Error($code, $mesg);
+        } elseif ( 200 != $code ) {
+            return new WP_Error($code, 'Unknown error!');
+        } elseif( !$body ) {
+            return new WP_Error('nodata', 'Data not found.');
+        } else {
+            return $body;
         }
-
-        return $request;
     }
 
     public function get_api_key()

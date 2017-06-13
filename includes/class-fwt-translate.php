@@ -163,7 +163,7 @@ class Fwt_Translate
         return $result;
     }
 
-    public function get_posts($language = null)
+    public function get_posts()
     {
         $query = new WP_Query();
 
@@ -175,13 +175,10 @@ class Fwt_Translate
 
         if (!empty($posts)) {
             foreach ($posts as $post) {
-                $post = $this->split($post->post_content);
-                $title = $this->split($post->post_title);
-
                 $result[] = array (
                     'ID' => $post->ID,
-                    'post_content' => !empty($language) ? isset($post[$language]) ? $post[$language] : '' : $post,
-                    'post_title' => !empty($language) ? isset($title[$language]) ? $title[$language] : '' : $title,
+                    'post_content' => $this->split($post->post_content),
+                    'post_title' => $this->split($post->post_title),
                 );
             }
         }

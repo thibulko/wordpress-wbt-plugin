@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="98284c9d-9a00-4f51-9796-8be44dff51f0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/class-fwt-admin.php" afterPath="$PROJECT_DIR$/admin/class-fwt-admin.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-fwt-api.php" afterPath="$PROJECT_DIR$/includes/class-fwt-api.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-fwt-translate.php" afterPath="$PROJECT_DIR$/includes/class-fwt-translate.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-fwt.php" afterPath="$PROJECT_DIR$/includes/class-fwt.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/class-fwt-public.php" afterPath="$PROJECT_DIR$/public/class-fwt-public.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,23 +16,23 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="class-fwt-api.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="class-fwt-api.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/includes/class-fwt-api.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
-              <caret line="81" column="37" lean-forward="false" selection-start-line="81" selection-start-column="37" selection-end-line="81" selection-end-column="37" />
+            <state relative-caret-position="425">
+              <caret line="81" column="20" lean-forward="false" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
               <folding>
-                <marker date="1497364278589" expanded="true" signature="2647:2695" ph="..." />
+                <marker date="1497367683963" expanded="true" signature="3693:3741" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="class-fwt-translate.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="class-fwt-translate.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/includes/class-fwt-translate.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="319">
-              <caret line="165" column="30" lean-forward="true" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="46" />
+            <state relative-caret-position="574">
+              <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -54,8 +51,8 @@
       <file leaf-file-name="class-fwt-admin.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/admin/class-fwt-admin.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="736">
-              <caret line="85" column="8" lean-forward="false" selection-start-line="85" selection-start-column="8" selection-end-line="85" selection-end-column="8" />
+            <state relative-caret-position="489">
+              <caret line="72" column="9" lean-forward="false" selection-start-line="72" selection-start-column="9" selection-end-line="72" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -75,10 +72,10 @@
         <option value="$PROJECT_DIR$/includes/class-fwt-config.php" />
         <option value="$PROJECT_DIR$/widgets/fwt-switcher-widget.php" />
         <option value="$PROJECT_DIR$/widgets/fwt-widget-switcher.php" />
-        <option value="$PROJECT_DIR$/admin/class-fwt-admin.php" />
         <option value="$PROJECT_DIR$/includes/class-fwt.php" />
         <option value="$PROJECT_DIR$/public/class-fwt-public.php" />
         <option value="$PROJECT_DIR$/includes/class-fwt-translate.php" />
+        <option value="$PROJECT_DIR$/admin/class-fwt-admin.php" />
         <option value="$PROJECT_DIR$/includes/class-fwt-api.php" />
       </list>
     </option>
@@ -290,12 +287,12 @@
       <updated>1497268625574</updated>
       <workItem from="1497268626809" duration="3592000" />
       <workItem from="1497272586389" duration="6210000" />
-      <workItem from="1497335732785" duration="23695000" />
+      <workItem from="1497335732785" duration="26141000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33497000" />
+    <option name="totallyTimeSpent" value="35943000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
@@ -336,7 +333,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1497364278589" expanded="true" signature="2647:2695" ph="..." />
+            <marker date="1497367683963" expanded="true" signature="3693:3741" ph="..." />
           </folding>
         </state>
       </provider>
@@ -386,7 +383,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1497364278589" expanded="true" signature="2647:2695" ph="..." />
+            <marker date="1497367683963" expanded="true" signature="3693:3741" ph="..." />
           </folding>
         </state>
       </provider>
@@ -455,18 +452,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/admin/class-fwt-admin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="736">
-          <caret line="85" column="8" lean-forward="false" selection-start-line="85" selection-start-column="8" selection-end-line="85" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/includes/class-fwt.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="83" column="8" lean-forward="false" selection-start-line="83" selection-start-column="8" selection-end-line="83" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/class-fwt-admin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="489">
+          <caret line="72" column="9" lean-forward="false" selection-start-line="72" selection-start-column="9" selection-end-line="72" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -479,21 +476,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/class-fwt-api.php">
+    <entry file="file://$PROJECT_DIR$/includes/class-fwt-translate.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="81" column="37" lean-forward="false" selection-start-line="81" selection-start-column="37" selection-end-line="81" selection-end-column="37" />
-          <folding>
-            <marker date="1497364278589" expanded="true" signature="2647:2695" ph="..." />
-          </folding>
+        <state relative-caret-position="574">
+          <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/class-fwt-translate.php">
+    <entry file="file://$PROJECT_DIR$/includes/class-fwt-api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="165" column="30" lean-forward="true" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="46" />
-          <folding />
+        <state relative-caret-position="425">
+          <caret line="81" column="20" lean-forward="false" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+          <folding>
+            <marker date="1497367683963" expanded="true" signature="3693:3741" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
