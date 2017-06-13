@@ -1,9 +1,10 @@
 <?php
-class fwt_switcher_widget extends WP_Widget {
+
+class Fwt_Widget_Switcher extends WP_Widget {
 
     private $config;
 
-    public function __construct($config){
+    public function __construct($config) {
         $this->config = $config;
 
         parent::__construct(
