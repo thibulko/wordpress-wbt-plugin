@@ -39,4 +39,24 @@ class Fwt_Config
 
         return $default;
     }
+
+    public function get_languages()
+    {
+        $result = [];
+
+        $default_language = $this->get_option('default_language');
+        $languages = $this->get_option('languages');
+
+        if (!empty($default_language)) {
+            $result[$default_language['code']] = '';
+        }
+
+        if (!empty($languages)) {
+            foreach ($languages as $language) {
+                $result[$language['code']] = '';
+            }
+        }
+
+        return array_keys($result);
+    }
 }

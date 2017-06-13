@@ -12,21 +12,27 @@ class Fwt_Api
 
     protected $errors;
 
-    protected $params = array();
+    protected $params = array(
+        'method' => "GET",
+        'user-agent' => 'WEB Translator'
+    );
 
     private $config;
+
+    private $translate;
 
     /**
      * Initialize the class and set its properties.
      */
-    public function __construct( $config )
+    public function __construct( $config, $translate )
     {
         $this->config = $config;
+        $this->translate = $translate;
     }
 
     public function sync()
     {
-        $project = $this->api_get('project/56');
+        /*$project = $this->remote_get('project/56');
 
         if (isset($project['data']['language'])) {
             $this->config->set_option('default_language', $project['data']['language']);
@@ -36,10 +42,30 @@ class Fwt_Api
             $this->config->set_option('languages', $project['data']['languages']);
         }
 
+        $this->config->set_option('updated_at', time());
+        */
+
+        $posts = get_posts(array('numberposts' => '-1'));
+        $languages = $this->config->get_languages();
+
+        foreach ($posts as $post) {
+            $content = $this->translate->split($post->post_content, $languages);
+            $title = $this->translate->split($post->post_title, $languages);
+
+            $row = [
+                'ID' => $post->id,
+                'post_content' => $content,
+                'post_title' => $title,
+            ];
+            $this->dump($row);
+            //wp_update_post( $row );
+        }
+
+
         return true;
     }
 
-    public function api_get($type, $params = [])
+    public function remote_get($type, $params = [])
     {
         $url = rtrim(self::API_URL, '/') . '/' . $type;
         $request = wp_remote_get($url, array_merge_recursive($this->params, $params));
@@ -54,5 +80,12 @@ class Fwt_Api
     public function get_api_key()
     {
         return $this->api_key;
+    }
+
+    public function dump($data)
+    {
+        print "<pre>";
+        print_r($data);
+        print "</pre>";
     }
 }
