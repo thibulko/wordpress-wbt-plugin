@@ -27,7 +27,7 @@
                 <a href="?page=fwt-settings&amp;action=sync" class="button button-danger">Export to fn.com</a>
             </td>
         </tr>
-        <?php if(true){ ?>
+        <?php if( !empty($fwt_languages) ){ ?>
             <tr>
                 <th>Languages</th>
                 <td>
