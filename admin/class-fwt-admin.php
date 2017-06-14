@@ -43,7 +43,8 @@ class Fwt_Admin
 
     public function route()
     {
-        switch ($_GET['action']){
+        $route = (empty($_GET['action'])) ? 'dashboard' : $_GET['action'];
+        switch ($route){
             case 'dashboard':
                 $this->render('dashboard');
                 break;
@@ -64,13 +65,31 @@ class Fwt_Admin
 
     public function render($page)
     {
+        ob_start();
         $file = FWT_DIR . 'admin/views/' . strtolower($page) . '.view.php';
         
-        if(file_exists($file)){
+        if( (file_exists($file)) && (method_exists($this, $page)) ){
+            extract($this->$page());
             include $file;
+            $ret = ob_get_contents();
+            ob_end_clean();
+            echo $ret;
         }else{
             exit(' Template not found!');
         }
+    }
+
+    public function dump($q){
+        echo '<pre>';
+        var_dump($q);
+        echo '</pre>';
+    }
+
+    public function dashboard(){
+        $fwt_languages = $this->config->get_languages();
+        return array(
+            'fwt_languages' => $fwt_languages
+        );
     }
 
     public function add_api_key()
@@ -84,11 +103,5 @@ class Fwt_Admin
     public function sync()
     {
         $this->api->refresh();
-
-        /*if( $this->api->sync() ){
-            echo 'Result is ok';
-        }else{
-            echo 'sync error';
-        }*/
     }
 }

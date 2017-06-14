@@ -27,6 +27,27 @@
                     <a href="?page=fwt-settings&amp;action=sync" class="button button-danger">Export to fn.com</a>
                 </td>
             </tr>
+            <?php if(true){ ?>
+            <tr>
+                <th>Languages</th>
+                <td>
+                <table class="wp-list-table widefat fixed striped posts">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach($fwt_languages as $language){ ?>
+                        <tr>
+                            <td><?php echo $language; ?></td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+                </td>
+            </tr>
+            <?php } ?>
         </tbody>
     </table>
 </div>
