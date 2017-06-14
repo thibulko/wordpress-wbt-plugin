@@ -40,7 +40,7 @@
                         <tbody>
                         <?php foreach($fwt_languages as $language){ ?>
                             <tr>
-                                <td><?php echo $language; ?></td>
+                                <td><?php echo $language['name']; ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>

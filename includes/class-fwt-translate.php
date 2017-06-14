@@ -70,7 +70,7 @@ class Fwt_Translate
         $languages = $this->languages;
 
         foreach($languages as $language) {
-            $result[$language] = '';
+            $result[$language['code']] = '';
         }
 
         foreach($blocks as $block) {
@@ -105,7 +105,7 @@ class Fwt_Translate
                         $current_language = false;
                     } else {
                         foreach ($languages as $language) {
-                            $result[$language] .= $block;
+                            $result[$language['code']] .= $block;
                         }
                     }
                     break;
