@@ -2,16 +2,16 @@
 
 class Fwt_Config
 {
+    public function set_options($value = [])
+    {
+        update_option(FWT_OPTION_NAME, json_encode($value));
+    }
+
     public function set_option($name, $value = null)
     {
         $options = $this->get_options();
         $options[$name] = $value;
         $this->set_options($options);
-    }
-
-    public function set_options($value = [])
-    {
-        update_option(FWT_OPTION_NAME, json_encode($value));
     }
 
     public function get_option($name, $default = null)

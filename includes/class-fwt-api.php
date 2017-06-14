@@ -32,7 +32,7 @@ class Fwt_Api
 
     public function sync()
     {
-        /*$project = $this->remote_get('project');
+        $project = $this->remote_request('project/' . $this->get_api_key());
 
         if (isset($project['data']['language'])) {
             $this->config->set_option('default_language', $project['data']['language']);
@@ -42,14 +42,14 @@ class Fwt_Api
             $this->config->set_option('languages', $project['data']['languages']);
         }
 
-        $this->config->set_option('updated_at', time());*/
+        $this->config->set_option('updated_at', time());
 
 
     }
 
     public function refresh()
     {
-        /*$posts = $this->translate->get_posts();
+        $posts = $this->translate->get_posts();
 
         if (!empty($posts)) {
             foreach ($posts as $post) {
@@ -59,7 +59,7 @@ class Fwt_Api
 
                 wp_update_post($post);
             }
-        }*/
+        }
 
         $this->create_tasks();
         $this->get_translations();
@@ -71,6 +71,8 @@ class Fwt_Api
 
         $languages = $this->config->get_languages();
 
+        $tasks = $this->config->get_option('tasks');
+
         foreach ($languages as $language) {
             $data = $this->remote_request($url . $language['id']);
 
@@ -80,9 +82,22 @@ class Fwt_Api
             }
 
             if (!empty($data['data']['data'])) {
-                foreach ($data['data']['data'] as $task) {
-                    if (!empty($task['translation'])) {
-                        $this->dump($task['translation']);
+                foreach ($data['data']['data'] as $val) {
+                    //$this->dump($val);
+
+                    if (!empty($tasks[$val['name']]) && !empty($val['translation'])) {
+                        $t = $tasks[$val['name']];
+
+                        $row = array('ID' => $t['id']);
+
+                        switch ($t['type']) {
+                            case 'post_title': $row['post_title'] = $val['translation']['value'];
+                                break;
+                            case 'post_content': $row['post_content'] = $val['translation']['value'];
+                                break;
+                        }
+$this->dump($row);
+                        wp_update_post( $row );
                     }
                 }
             }
@@ -96,31 +111,58 @@ class Fwt_Api
         $default_language = $this->config->get_option('default_language');
         $default_language = $default_language['code'];
 
+        $tasks = $this->config->get_option('tasks');
+
+        if (empty($tasks)) {
+            $tasks = array();
+            $this->config->set_option('tasks', $tasks);
+        }
+
         $posts = $this->translate->get_posts();
 
         if (!empty($posts)) {
             foreach ($posts as $post) {
                 if (!empty($post['post_content'][$default_language])) {
+                    $task = array(
+                        'id' => $post['ID'],
+                        'type' => 'post_content',
+                    );
+
+                    $key = md5(serialize($task));
+
                     $this->remote_request($url, array(
                         'method' => 'POST',
                         'body' => array(
-                            'name' => 'post_content_' . $post['ID'],
+                            'name' => $key,
                             'value' => $post['post_content'][$default_language],
                         )
                     ));
+
+                    $tasks[$key] = $task;
                 }
 
                 if (!empty($post['post_title'][$default_language])) {
+                    $task = array(
+                        'id' => $post['ID'],
+                        'type' => 'post_title',
+                    );
+
+                    $key = md5(serialize($task));
+
                     $this->remote_request($url, array(
                         'method' => 'POST',
                         'data' => array(
-                            'name' => 'post_title_' . $post['ID'],
+                            'name' => $key,
                             'value' => $post['post_title'][$default_language],
                         )
                     ));
+
+                    $tasks[$key] = $task;
                 }
             }
         }
+        $this->dump($tasks);
+        $this->config->set_option('tasks', $tasks);
     }
 
     public function remote_request($type, $params = [])

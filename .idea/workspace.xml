@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="98284c9d-9a00-4f51-9796-8be44dff51f0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/views/dashboard.view.php" afterPath="$PROJECT_DIR$/admin/views/dashboard.view.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-fwt-api.php" afterPath="$PROJECT_DIR$/includes/class-fwt-api.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-fwt-config.php" afterPath="$PROJECT_DIR$/includes/class-fwt-config.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/class-fwt-translate.php" afterPath="$PROJECT_DIR$/includes/class-fwt-translate.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,8 +19,8 @@
       <file leaf-file-name="class-fwt-api.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/includes/class-fwt-api.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="608">
-              <caret line="88" column="9" lean-forward="false" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+            <state relative-caret-position="200">
+              <caret line="49" column="27" lean-forward="false" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -31,28 +29,8 @@
       <file leaf-file-name="class-fwt-translate.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/includes/class-fwt-translate.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1819">
-              <caret line="107" column="53" lean-forward="false" selection-start-line="107" selection-start-column="53" selection-end-line="107" selection-end-column="53" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dashboard.view.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/admin/views/dashboard.view.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="642">
-              <caret line="42" column="62" lean-forward="false" selection-start-line="42" selection-start-column="62" selection-end-line="42" selection-end-column="62" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="class-fwt-admin.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/admin/class-fwt-admin.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="438">
-              <caret line="88" column="56" lean-forward="true" selection-start-line="88" selection-start-column="56" selection-end-line="88" selection-end-column="56" />
+            <state relative-caret-position="2788">
+              <caret line="167" column="29" lean-forward="false" selection-start-line="167" selection-start-column="21" selection-end-line="167" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -61,8 +39,18 @@
       <file leaf-file-name="class-fwt-config.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/includes/class-fwt-config.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="693">
-              <caret line="58" column="4" lean-forward="false" selection-start-line="58" selection-start-column="4" selection-end-line="58" selection-end-column="4" />
+            <state relative-caret-position="306">
+              <caret line="18" column="31" lean-forward="false" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-fwt-admin.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/admin/class-fwt-admin.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="710">
+              <caret line="117" column="25" lean-forward="false" selection-start-line="117" selection-start-column="25" selection-end-line="117" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -326,12 +314,12 @@
       <workItem from="1497268626809" duration="3592000" />
       <workItem from="1497272586389" duration="6210000" />
       <workItem from="1497335732785" duration="26759000" />
-      <workItem from="1497422358233" duration="8104000" />
+      <workItem from="1497422358233" duration="12596000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44665000" />
+    <option name="totallyTimeSpent" value="49157000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
@@ -531,14 +519,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/class-fwt.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="83" column="8" lean-forward="false" selection-start-line="83" selection-start-column="8" selection-end-line="83" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/class-fwt-public.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
@@ -547,42 +527,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/class-fwt-translate.php">
+    <entry file="file://$PROJECT_DIR$/admin/views/dashboard.view.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1819">
-          <caret line="107" column="53" lean-forward="false" selection-start-line="107" selection-start-column="53" selection-end-line="107" selection-end-column="53" />
+        <state relative-caret-position="642">
+          <caret line="54" column="62" lean-forward="false" selection-start-line="54" selection-start-column="62" selection-end-line="54" selection-end-column="62" />
+          <folding>
+            <marker date="1497432582320" expanded="true" signature="1280:2000" ph="..." />
+            <marker date="1497432582320" expanded="true" signature="1301:1982" ph="..." />
+            <marker date="1497432582320" expanded="true" signature="1357:1964" ph="..." />
+            <marker date="1497432582320" expanded="true" signature="1435:1942" ph="..." />
+            <marker date="1497432582320" expanded="true" signature="1467:1601" ph="..." />
+            <marker date="1497432582320" expanded="true" signature="1496:1568" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/class-fwt.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-188">
+          <caret line="83" column="8" lean-forward="false" selection-start-line="83" selection-start-column="8" selection-end-line="83" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/admin/views/dashboard.view.php">
+    <entry file="file://$PROJECT_DIR$/includes/class-fwt-translate.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="642">
-          <caret line="42" column="62" lean-forward="false" selection-start-line="42" selection-start-column="62" selection-end-line="42" selection-end-column="62" />
+        <state relative-caret-position="2788">
+          <caret line="167" column="29" lean-forward="false" selection-start-line="167" selection-start-column="21" selection-end-line="167" selection-end-column="29" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/includes/class-fwt-config.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="58" column="4" lean-forward="false" selection-start-line="58" selection-start-column="4" selection-end-line="58" selection-end-column="4" />
+        <state relative-caret-position="306">
+          <caret line="18" column="31" lean-forward="false" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/admin/class-fwt-admin.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="88" column="56" lean-forward="true" selection-start-line="88" selection-start-column="56" selection-end-line="88" selection-end-column="56" />
+        <state relative-caret-position="710">
+          <caret line="117" column="25" lean-forward="false" selection-start-line="117" selection-start-column="25" selection-end-line="117" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/includes/class-fwt-api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="608">
-          <caret line="88" column="9" lean-forward="false" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+        <state relative-caret-position="200">
+          <caret line="49" column="27" lean-forward="false" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="27" />
           <folding />
         </state>
       </provider>
