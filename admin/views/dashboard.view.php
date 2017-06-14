@@ -1,5 +1,22 @@
 
 <div class="wrap">
+
+    <?php if(!empty($errors)){ ?>
+        <?php foreach($errors as $error){ ?>
+            <div class="error settings-error notice is-dismissible">
+                <p><strong><?php echo $error; ?></strong></p>
+            </div>
+        <?php } ?>
+    <?php } ?>
+
+    <?php if(!empty($success)){ ?>
+        <?php foreach($success as $notice){ ?>
+            <div class="updated settings-error notice is-dismissible">
+                <p><strong><?php echo $notice; ?></strong></p>
+            </div>
+        <?php } ?>
+    <?php } ?>
+
     <h1>FWT Settings</h1>
     <table class="form-table">
         <tbody>
@@ -10,9 +27,7 @@
 
             <td>
                 <form method="POST" action="?page=fwt-settings&amp;action=add_key">
-                    <input type="text" style="width: 350px" name="api_key">
-                    <button class="button button-primary">Save</button>
-                </form>
+                    <input type="text" style="width: 350px" value="<?php echo ( !empty($keys['api']) ? $keys['api'] : '' );?>" name="api_key">
             </td>
         </tr>
         <tr>
@@ -21,10 +36,10 @@
             </th>
 
             <td>
-                <form method="POST" action="?page=fwt-settings&amp;action=add_secret_key">
-                    <input type="text" style="width: 350px" name="secret_key">
+                    <input type="text" style="width: 350px" value="<?php echo ( !empty($keys['security']) ? $keys['security'] : '' );?>" name="secret_key">
+                    <br>
                     <button class="button button-primary">Save</button>
-                </form>
+                </form
             </td>
         </tr>
         <tr>
