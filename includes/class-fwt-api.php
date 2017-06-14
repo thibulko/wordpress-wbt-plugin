@@ -30,21 +30,29 @@ class Fwt_Api
         $this->translate = $translate;
     }
 
-    public function sync()
+    public function init()
     {
         $project = $this->remote_request('project/' . $this->get_api_key());
 
-        if (isset($project['data']['language'])) {
-            $this->config->set_option('default_language', $project['data']['language']);
+        if (!empty($project['data']['id'])) {
+            $this->config->set_option('default_language', isset($project['data']['language']) ? $project['data']['language'] : []);
+            $this->config->set_option('languages', isset($project['data']['languages']) ? $project['data']['languages'] : []);
+            $this->config->set_option('updated_at', time());
+            $this->config->set_option('tasks', []);
+
+            $this->refresh();
         }
+    }
 
-        if (isset($project['data']['languages'])) {
-            $this->config->set_option('languages', $project['data']['languages']);
-        }
+    public function export()
+    {
+        $this->create_tasks();
+        //$this->get_translations();
+    }
 
-        $this->config->set_option('updated_at', time());
-
-
+    public function import()
+    {
+        $this->get_translations();
     }
 
     public function refresh()
@@ -60,9 +68,6 @@ class Fwt_Api
                 wp_update_post($post);
             }
         }
-
-        $this->create_tasks();
-        $this->get_translations();
     }
 
     public function get_translations()
@@ -83,21 +88,36 @@ class Fwt_Api
 
             if (!empty($data['data']['data'])) {
                 foreach ($data['data']['data'] as $val) {
-                    //$this->dump($val);
-
                     if (!empty($tasks[$val['name']]) && !empty($val['translation'])) {
                         $t = $tasks[$val['name']];
 
-                        $row = array('ID' => $t['id']);
+                        $post = array('ID' => $t['id']);
 
                         switch ($t['type']) {
-                            case 'post_title': $row['post_title'] = $val['translation']['value'];
-                                break;
-                            case 'post_content': $row['post_content'] = $val['translation']['value'];
-                                break;
+                            case 'post_title': {
+                                $b = $this->translate->split($post['post_title']);
+
+                                if (isset($b[$language['code']])) {
+                                    $b[$language['code']] = $val['translation']['value'];
+                                    $post['post_title'] = $this->translate->join($b);
+                                }
+                            }
+                            break;
+
+                            case 'post_content': {
+                                $b = $this->translate->split($post['post_content']);
+
+                                if (isset($b[$language['code']])) {
+                                    $b[$language['code']] = $val['translation']['value'];
+                                    $post['post_content'] = $this->translate->join($b);
+                                }
+                            }
+                            break;
                         }
-$this->dump($row);
-                        wp_update_post( $row );
+                        $this->dump($post);
+
+
+                        //wp_update_post( $row );
                     }
                 }
             }
@@ -151,7 +171,7 @@ $this->dump($row);
 
                     $this->remote_request($url, array(
                         'method' => 'POST',
-                        'data' => array(
+                        'body' => array(
                             'name' => $key,
                             'value' => $post['post_title'][$default_language],
                         )
@@ -161,7 +181,7 @@ $this->dump($row);
                 }
             }
         }
-        $this->dump($tasks);
+
         $this->config->set_option('tasks', $tasks);
     }
 
@@ -174,7 +194,7 @@ $this->dump($row);
         $code = wp_remote_retrieve_response_code( $request );
         $mesg = wp_remote_retrieve_response_message( $request );
         $body = json_decode(wp_remote_retrieve_body( $request ), true );
-
+        $this->dump($params);
         if ( 200 != $code && !empty( $mesg ) ) {
             return new WP_Error($code, $mesg);
         } elseif ( 200 != $code ) {

@@ -175,7 +175,7 @@ class Fwt_Translate
 
         if (!empty($posts)) {
             foreach ($posts as $post) {
-                $result[] = array (
+                $result[$post->ID] = array (
                     'ID' => $post->ID,
                     'post_content' => $this->split($post->post_content),
                     'post_title' => $this->split($post->post_title),

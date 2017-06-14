@@ -46,6 +46,7 @@ class Fwt_Admin
     public function route()
     {
         $route = (empty($_GET['action'])) ? 'dashboard' : $_GET['action'];
+
         switch ($route){
             case 'dashboard':
                 $this->render('dashboard.view.php', 'dashboard');
@@ -55,11 +56,16 @@ class Fwt_Admin
                 $this->render('dashboard.view.php', 'add_api_key');
                 break;
 
-            case 'add_secret_key':
-                $this->add_secret_key();
+            case 'add_api_key':
+                $this->add_api_key();
+                break;
 
-            case 'sync':
-                $this->sync();
+            case 'export':
+                $this->api->export();
+                break;
+
+            case 'import':
+                $this->api->import();
                 break;
 
             default:
@@ -87,56 +93,36 @@ class Fwt_Admin
         }
     }
 
-    public function dump($q)
-    {
-        echo '<pre>';
-        var_dump($q);
-        echo '</pre>';
-    }
-
     public function dashboard()
     {
-        $fwt_languages = $this->config->get_languages();
-           $keys = array(
-                'api' => $this->config->get_option('api_key'),
-                'security' => $this->config->get_option('secret_key')
-            );
         return array(
-            'fwt_languages' => $fwt_languages,
-            'keys' => $keys
+            'fwt_languages' => $this->config->get_languages(),
+            'api_key' => $this->config->get_option('api_key')
         );
     }
 
     public function add_api_key()
     {
-        if( ( !empty($_POST['api_key']) ) && ( !empty($_POST['secret_key']) ) ){
-            $this->config->set_option('api_key', $_POST['api_key']);
-            $this->config->set_option('secret_key', $_POST['secret_key']);
-            $keys = array(
-                'api' => $this->config->get_option('api_key'),
-                'security' => $this->config->get_option('secret_key')
-            );
-            $this->api->sync();
+        $languages = $this->config->get_languages();
+
+        if ( ( !empty($_POST['api_key'])  ) ) {
+            $api_key = $_POST['api_key'];
+
+            $this->config->set_option('api_key', $api_key);
+            $this->api->init();
 
             return array(
-                'fwt_languages' => $this->config->get_languages(),
-                'keys' => $keys,
-                'success' => array('Keys was added')
+                'fwt_languages' =>$languages,
+                'api_key' => $api_key,
+                'success' => array('Key was added')
             );
-            
-        }else{
-
+        } else {
             return array(
-                'fwt_languages' => $this->config->get_languages(),
-                'keys' => $keys,
-                'errors' => array('Please set API key and Security key')
+                'fwt_languages' => $languages,
+                'api_key' => $this->config->get_option('api_key'),
+                'errors' => array('Please set API key')
             );
 
         }        
-    }
-
-    public function sync()
-    {
-        $this->api->refresh();
     }
 }

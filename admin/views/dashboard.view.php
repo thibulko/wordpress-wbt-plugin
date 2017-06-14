@@ -18,6 +18,8 @@
     <?php } ?>
 
     <h1>FWT Settings</h1>
+
+    <form method="POST" action="?page=fwt-settings&amp;action=add_key">
     <table class="form-table">
         <tbody>
         <tr>
@@ -26,55 +28,60 @@
             </th>
 
             <td>
-                <form method="POST" action="?page=fwt-settings&amp;action=add_key">
-                    <input type="text" style="width: 350px" value="<?php echo ( !empty($keys['api']) ? $keys['api'] : '' );?>" name="api_key">
+                <input type="text" style="width: 350px" value="<?php echo !empty($api_key) ? $api_key : '';?>" name="api_key">
             </td>
         </tr>
         <tr>
-            <th>
-                Secutiry key
-            </th>
-
+            <td>&nbsp;</td>
             <td>
-                    <input type="text" style="width: 350px" value="<?php echo ( !empty($keys['security']) ? $keys['security'] : '' );?>" name="secret_key">
-                    <br>
-                    <button class="button button-primary">Save</button>
-                </form
+                <button class="button button-primary">Add</button>
             </td>
         </tr>
         <tr>
             <th>
-                Import / Export
+                Export
                 <p class="description">
-                    Here you can send us your articles or sync all data.
+                    Here you can send us your articles.
+                </p>
+            </th>
+            <td>
+                <a href="?page=fwt-settings&amp;action=export" class="button button-danger">Export to fn.com</a>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Import
+                <p class="description">
+                    Here you can import your translates.
                 </p>
             </th>
 
             <td>
-                <a href="?page=fwt-settings&amp;action=sync" class="button button-danger">Export to fn.com</a>
+                <a href="?page=fwt-settings&amp;action=import" class="button button-danger">Import from fn.com</a>
             </td>
         </tr>
-        <?php if( !empty($fwt_languages) ){ ?>
+        <?php if( !empty($fwt_languages) ): ?>
             <tr>
                 <th>Languages</th>
                 <td>
                     <table class="wp-list-table widefat fixed striped posts">
                         <thead>
-                        <tr>
-                            <td>Name</td>
-                        </tr>
+                            <tr>
+                                <th>Name</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <?php foreach($fwt_languages as $language){ ?>
+                        <?php foreach($fwt_languages as $language): ?>
                             <tr>
                                 <td><?php echo $language['name']; ?></td>
                             </tr>
-                        <?php } ?>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                 </td>
             </tr>
-        <?php } ?>
+        <?php endif ?>
         </tbody>
     </table>
+    </form>
 </div>
