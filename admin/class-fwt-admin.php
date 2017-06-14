@@ -52,12 +52,12 @@ class Fwt_Admin
             case 'add_key':
                 $this->add_api_key();
                 break;
-                
+
             case 'sync':
                 $this->sync();
                 break;
 
-            default: 
+            default:
                 $this->render('dashboard');
                 break;
         }
@@ -67,7 +67,7 @@ class Fwt_Admin
     {
         ob_start();
         $file = FWT_DIR . 'admin/views/' . strtolower($page) . '.view.php';
-        
+
         if( (file_exists($file)) && (method_exists($this, $page)) ){
             extract($this->$page());
             include $file;
@@ -96,12 +96,12 @@ class Fwt_Admin
     {
         if( !empty($_POST['api_key']) ){
             $this->config->set_option('api_key', $_POST['api_key']);
+            $this->api->sync();
         }
     }
 
     public function sync()
     {
-        $this->api->sync();
         $this->api->refresh();
     }
 }
