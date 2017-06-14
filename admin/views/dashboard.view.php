@@ -11,7 +11,19 @@
             <td>
                 <form method="POST" action="?page=fwt-settings&amp;action=add_key">
                     <input type="text" style="width: 350px" name="api_key">
-                    <button class="button button-primary">ADD</button>
+                    <button class="button button-primary">Save</button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Secutiry key
+            </th>
+
+            <td>
+                <form method="POST" action="?page=fwt-settings&amp;action=add_secret_key">
+                    <input type="text" style="width: 350px" name="secret_key">
+                    <button class="button button-primary">Save</button>
                 </form>
             </td>
         </tr>

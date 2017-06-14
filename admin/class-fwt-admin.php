@@ -53,6 +53,9 @@ class Fwt_Admin
                 $this->add_api_key();
                 break;
 
+            case 'add_secret_key':
+                $this->add_secret_key();
+
             case 'sync':
                 $this->sync();
                 break;
@@ -79,13 +82,15 @@ class Fwt_Admin
         }
     }
 
-    public function dump($q){
+    public function dump($q)
+    {
         echo '<pre>';
         var_dump($q);
         echo '</pre>';
     }
 
-    public function dashboard(){
+    public function dashboard()
+    {
         $fwt_languages = $this->config->get_languages();
         return array(
             'fwt_languages' => $fwt_languages
@@ -96,6 +101,14 @@ class Fwt_Admin
     {
         if( !empty($_POST['api_key']) ){
             $this->config->set_option('api_key', $_POST['api_key']);
+            $this->api->sync();
+        }
+    }
+
+    public function add_secret_key()
+    {
+        if( !empty($_POST['secret_key']) ){
+            $this->config->set_option('secret_key', $_POST['secret_key']);
             $this->api->sync();
         }
     }
