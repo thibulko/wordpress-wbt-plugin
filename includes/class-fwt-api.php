@@ -44,7 +44,8 @@ class Fwt_Api
 
         $this->config->set_option('updated_at', time());*/
 
-        $this->create_tasks();
+        //$this->create_tasks();
+        $this->get_translations();
     }
 
     public function refresh()
@@ -62,36 +63,60 @@ class Fwt_Api
         }*/
     }
 
+    public function get_translations()
+    {
+        $url = 'project/' . $this->get_api_key() . '/translations/';
+
+        $languages = $this->config->get_languages();
+
+        foreach ($languages as $language_id => $language_code) {
+            $data = $this->remote_request($url . $language_id);
+
+            if( is_wp_error( $data ) ){
+                echo $data->get_error_code() . $data->get_error_message();
+                break;
+            }
+//$this->dump($data);
+            if (!empty($data['data']['data'])) {
+                foreach ($data['data']['data'] as $task) {
+                    if (!empty($task['translation'])) {
+                        $this->dump($task['translation']);
+                    }
+                }
+            }
+        }
+
+    }
+
     public function create_tasks()
     {
+        $url = 'project/' . $this->get_api_key() . '/tasks/create';
+
         $default_language = $this->config->get_option('default_language');
+        $default_language = $default_language['code'];
 
         $posts = $this->translate->get_posts();
 
         if (!empty($posts)) {
             foreach ($posts as $post) {
-                if (!empty($post['post_content'][$default_language['code']])) {
-                    $args = array(
+                if (!empty($post['post_content'][$default_language])) {
+                    $this->remote_request($url, array(
                         'method' => 'POST',
                         'body' => array(
-                            'name' => 'post_' . $post['ID'] . '_content',
-                            'value' => $post['post_content'][$default_language['code']],
+                            'name' => 'post_content_' . $post['ID'],
+                            'value' => $post['post_content'][$default_language],
                         )
-                    );
-
-                    $this->remote_request('project/' . $this->get_api_key() . '/tasks/create', $args);
+                    ));
                 }
 
-                if (!empty($post['post_title'][$default_language['code']])) {
-                    $args = array(
+                if (!empty($post['post_title'][$default_language])) {
+                    $this->remote_request($url, array(
                         'method' => 'POST',
                         'data' => array(
-                            'name' => 'post_' . $post['ID'] . '_title',
-                            'value' => $post['post_title'][$default_language['code']],
+                            'name' => 'post_title_' . $post['ID'],
+                            'value' => $post['post_title'][$default_language],
                         )
-                    );
-
-                    $this->remote_request('project/' . $this->get_api_key() . '/tasks/create', $args);
+                    ));
                 }
             }
         }
@@ -105,7 +130,7 @@ class Fwt_Api
 
         $code = wp_remote_retrieve_response_code( $request );
         $mesg = wp_remote_retrieve_response_message( $request );
-        $body = json_decode(wp_remote_retrieve_body( $request ));
+        $body = json_decode(wp_remote_retrieve_body( $request ), true );
 
         if ( 200 != $code && !empty( $mesg ) ) {
             return new WP_Error($code, $mesg);
@@ -128,8 +153,6 @@ class Fwt_Api
 
     public function dump($data)
     {
-        print "<pre>";
-        print_r($data);
-        print "</pre>";
+        print "<pre>" . print_r($data, true) . "</pre>";
     }
 }
