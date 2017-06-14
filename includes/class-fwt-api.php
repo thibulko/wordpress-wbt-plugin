@@ -44,8 +44,7 @@ class Fwt_Api
 
         $this->config->set_option('updated_at', time());*/
 
-        //$this->create_tasks();
-        $this->get_translations();
+
     }
 
     public function refresh()
@@ -61,6 +60,9 @@ class Fwt_Api
                 wp_update_post($post);
             }
         }*/
+
+        $this->create_tasks();
+        $this->get_translations();
     }
 
     public function get_translations()
@@ -69,14 +71,14 @@ class Fwt_Api
 
         $languages = $this->config->get_languages();
 
-        foreach ($languages as $language_id => $language_code) {
-            $data = $this->remote_request($url . $language_id);
+        foreach ($languages as $language) {
+            $data = $this->remote_request($url . $language['id']);
 
             if( is_wp_error( $data ) ){
                 echo $data->get_error_code() . $data->get_error_message();
                 break;
             }
-//$this->dump($data);
+
             if (!empty($data['data']['data'])) {
                 foreach ($data['data']['data'] as $task) {
                     if (!empty($task['translation'])) {
@@ -85,7 +87,6 @@ class Fwt_Api
                 }
             }
         }
-
     }
 
     public function create_tasks()

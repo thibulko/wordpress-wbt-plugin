@@ -48,15 +48,15 @@ class Fwt_Config
         $languages = $this->get_option('languages');
 
         if (!empty($default_language)) {
-            $result[$default_language['id']] = $default_language['code'];
+            $result[$default_language['id']] = $default_language;
         }
 
         if (!empty($languages)) {
             foreach ($languages as $language) {
-                $result[$language['id']] = $language['code'];
+                $result[$language['id']] = $language;
             }
         }
-
-        return array_keys($result);
+    
+        return $result;
     }
 }
