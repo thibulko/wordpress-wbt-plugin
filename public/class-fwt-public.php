@@ -44,7 +44,7 @@ class Fwt_Public
 
     public function the_content($content)
     {
-        $current_language = !empty($_GET['lang']) ? $_GET['lang'] : 'ua';
+        $current_language = !empty($_GET['lang']) ? $_GET['lang'] : 'en';
 
         $content = $this->translate->split($content);
 

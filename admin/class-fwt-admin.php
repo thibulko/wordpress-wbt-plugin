@@ -56,16 +56,14 @@ class Fwt_Admin
                 $this->render('dashboard.view.php', 'add_api_key');
                 break;
 
-            case 'add_api_key':
-                $this->add_api_key();
-                break;
-
             case 'export':
-                $this->api->export();
+                $cnt = $this->api->export();
+                echo 'Export ' . $cnt . ' abstract names.';
                 break;
 
             case 'import':
-                $this->api->import();
+                $cnt = $this->api->import();
+                echo 'Import ' . $cnt . ' translation values.';
                 break;
 
             default:
@@ -80,10 +78,8 @@ class Fwt_Admin
         $file = FWT_DIR . 'admin/views/' . strtolower($page);
 
         if( (file_exists($file)) && (method_exists($this, $controller)) ){
-            if($this->$controller()){
-                extract($this->$controller());
-            }
-            
+            extract($this->$controller());
+
             include $file;
             $ret = ob_get_contents();
             ob_end_clean();

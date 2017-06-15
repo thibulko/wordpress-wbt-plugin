@@ -4,7 +4,8 @@ class Fwt_Widget_Switcher extends WP_Widget {
 
     private $config;
 
-    public function __construct($config) {
+    public function __construct($config)
+    {
         $this->config = $config;
 
         parent::__construct(
@@ -17,13 +18,15 @@ class Fwt_Widget_Switcher extends WP_Widget {
     }
 
     //frontend of widget
-    public function widget( $args, $instance ){
+    public function widget( $args, $instance )
+    {
         $title = apply_filters( 'widget_title', $instance['title'] );
         
         $tmp = '<label>Language</label><select  onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);" style="width:100%;">';
+            $tmp .= '<option value="">--------</option>';
         if( !empty($this->get_aviable_langs()) ){
             foreach( $this->get_aviable_langs() as $lang ){
-                $tmp .= '<option value="'.$this->get_link().'?lang='.$lang.'">'.$lang.'</option>';
+                $tmp .= '<option value="'.$this->get_link().'?lang='.$lang['code'].'">'.$lang['name'].'</option>';
             }
         }
         $tmp .='</select>';
@@ -31,11 +34,13 @@ class Fwt_Widget_Switcher extends WP_Widget {
         echo $tmp;
     }
 
-    private function get_aviable_langs(){
+    private function get_aviable_langs()
+    {
         return $this->config->get_languages();
     }
 
-    private function get_link(){
+    private function get_link()
+    {
         global $wp;
         $current_url = home_url(add_query_arg(array(),$wp->request));
 

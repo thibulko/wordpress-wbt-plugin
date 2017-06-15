@@ -1,51 +1,61 @@
 <?php
 
-class Fwt_Config
+class FwtConfig extends FwtAbstract
 {
-    public function set_options($value = [])
+    const OPTION_NAME = 'fwt_project_params';
+
+    const VERSION = '0.0.1';
+
+    const PLUGIN_NAME = 'fwt';
+
+    protected $options;
+
+    public function getVersion()
     {
-        update_option(FWT_OPTION_NAME, json_encode($value));
+        return self::VERSION;
     }
 
-    public function set_option($name, $value = null)
+    public function getPluginName()
     {
-        $options = $this->get_options();
+        return self::PLUGIN_NAME;
+    }
+
+    public function setOptions($value = [])
+    {
+        update_option(self::OPTION_NAME, json_encode($value));
+    }
+
+    public function setOption($name, $value = null)
+    {
+        $options = $this->getOptions();
         $options[$name] = $value;
-        $this->set_options($options);
+        $this->setOptions($options);
     }
 
-    public function get_option($name, $default = null)
+    public function getOption($name, $default = null)
     {
-        return $this->get_options($name, $default);
-    }
+        $options = $this->getOptions();
 
-    public function get_options($name = null, $default = null)
-    {
-        $options = get_option(FWT_OPTION_NAME);
-
-        if ( (!empty($options)) && ( !is_array($options) ) ) {
-            $options = json_decode($options, true);
-
-            if (null !== $name) {
-                if (isset($options[$name])) {
-                    return $options[$name];
-                }
-
-                return $default;
-            }
-
-            return $options;
+        if (isset($options[$name])) {
+            return $options[$name];
         }
-
         return $default;
     }
 
-    public function get_languages()
+    public function getOptions()
+    {
+        if (null === $this->options) {
+            $this->options = json_decode(get_option(self::OPTION_NAME), true);
+        }
+        return $this->options;
+    }
+
+    public function getLanguages()
     {
         $result = [];
 
-        $default_language = $this->get_option('default_language');
-        $languages = $this->get_option('languages');
+        $default_language = $this->getOption('default_language');
+        $languages = $this->getOption('languages');
 
         if (!empty($default_language)) {
             $result[$default_language['id']] = $default_language;
