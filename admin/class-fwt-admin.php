@@ -57,6 +57,10 @@ class FwtAdmin extends FwtAbstract
         }else{
             exit(' Template not found!');
         }
+
+        if (!empty($this->getErrors())) {
+            var_dump($this->getErrors());
+        }
     }
 
     public function dashboard()

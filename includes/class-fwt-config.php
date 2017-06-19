@@ -8,8 +8,6 @@ class FwtConfig extends FwtAbstract
 
     const PLUGIN_NAME = 'fwt';
 
-    protected $options;
-
     public function getVersion()
     {
         return self::VERSION;
@@ -44,10 +42,7 @@ class FwtConfig extends FwtAbstract
 
     public function getOptions()
     {
-        if (null === $this->options) {
-            $this->options = json_decode(get_option(self::OPTION_NAME), true);
-        }
-        return $this->options;
+        return json_decode(get_option(self::OPTION_NAME), true);
     }
 
     public function getLanguages()

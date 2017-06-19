@@ -10,6 +10,8 @@ class FwtContainer
 
     protected $translator;
 
+    protected $httpClient;
+
     public function getConfig()
     {
         if (null === $this->config) {
@@ -37,12 +39,21 @@ class FwtContainer
         return $this->loader;
     }
 
-    public function geTranslator()
+    public function getTranslator()
     {
         if (null === $this->translator) {
             require_once dirname( __FILE__ ) . '/class-fwt-translator.php';
             $this->translator = new FwtTranslator($this);
         }
         return $this->translator;
+    }
+
+    public function getHttpClient()
+    {
+        if (null === $this->httpClient) {
+            require_once dirname( __FILE__ ) . '/class-fwt-http-client.php';
+            $this->httpClient = new FwtHttpClient($this);
+        }
+        return $this->httpClient;
     }
 }
