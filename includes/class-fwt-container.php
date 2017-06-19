@@ -13,7 +13,7 @@ class FwtContainer
     public function getConfig()
     {
         if (null === $this->config) {
-            require_once dirname( __FILE__ ) . 'class-fwt-config.php';
+            require_once dirname( __FILE__ ) . '/class-fwt-config.php';
             $this->config = new FwtConfig($this);
         }
         return $this->config;
@@ -22,7 +22,7 @@ class FwtContainer
     public function getApi()
     {
         if (null === $this->api) {
-            require_once dirname( __FILE__ ) . 'class-fwt-api.php';
+            require_once dirname( __FILE__ ) . '/class-fwt-api.php';
             $this->api = new FwtApi($this);
         }
         return $this->api;
@@ -31,7 +31,7 @@ class FwtContainer
     public function getLoader()
     {
         if (null === $this->loader) {
-            require_once dirname( __FILE__ ) . 'class-fwt-loader.php';
+            require_once dirname( __FILE__ ) . '/class-fwt-loader.php';
             $this->loader = new FwtLoader($this);
         }
         return $this->loader;
@@ -40,7 +40,7 @@ class FwtContainer
     public function geTranslator()
     {
         if (null === $this->translator) {
-            require_once dirname( __FILE__ ) . 'class-fwt-translator.php';
+            require_once dirname( __FILE__ ) . '/class-fwt-translator.php';
             $this->translator = new FwtTranslator($this);
         }
         return $this->translator;

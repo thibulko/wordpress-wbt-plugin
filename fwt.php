@@ -15,8 +15,11 @@ if ( ! defined( 'WPINC' ) ) {
  * Begins execution of the plugin.
  */
 function run_fwt() {
-    require_once dirname( __FILE__ ) . 'includes/class-fwt.php';
-    $plugin = new Fwt();
+    require_once dirname( __FILE__ ) . '/includes/class-fwt-container.php';
+    $container = new FwtContainer();
+
+    require_once dirname( __FILE__ ) . '/includes/class-fwt.php';
+    $plugin = new Fwt($container);
     $plugin->run();
 }
 

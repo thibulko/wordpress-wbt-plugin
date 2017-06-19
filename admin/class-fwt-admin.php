@@ -1,37 +1,7 @@
 <?php
-/**
- * The admin-specific functionality of the plugin.
- */
 
-class Fwt_Admin
+class FwtAdmin extends FwtAbstract
 {
-    /**
-     * The ID of this plugin.
-     */
-    private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     */
-    private $version;
-
-    private $config;
-
-    private $api;
-
-
-    /**
-     * Initialize the class and set its properties.
-     */
-    public function __construct( $config, $api, $plugin_name, $version )
-    {
-        $this->config = $config;
-        $this->api = $api;
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
-    }
-    
-
     public function init_menu ()
     {
         add_options_page(
@@ -57,12 +27,12 @@ class Fwt_Admin
                 break;
 
             case 'export':
-                $cnt = $this->api->export();
+                $cnt = $this->getContainer()->getApi()->export();
                 echo 'Export ' . $cnt . ' abstract names.';
                 break;
 
             case 'import':
-                $cnt = $this->api->import();
+                $cnt = $this->getContainer()->getApi()->import();
                 echo 'Import ' . $cnt . ' translation values.';
                 break;
 
@@ -72,10 +42,10 @@ class Fwt_Admin
         }
     }
 
-    public function render($page, $controller)
+    public function render($page, $controller = null)
     {
         ob_start();
-        $file = FWT_DIR . 'admin/views/' . strtolower($page);
+        $file = dirname(__FILE__) . '/views/' . strtolower($page);
 
         if( (file_exists($file)) && (method_exists($this, $controller)) ){
             extract($this->$controller());
@@ -92,20 +62,20 @@ class Fwt_Admin
     public function dashboard()
     {
         return array(
-            'fwt_languages' => $this->config->get_languages(),
-            'api_key' => $this->config->get_option('api_key')
+            'fwt_languages' => $this->getContainer()->getConfig()->getLanguages(),
+            'api_key' => $this->getContainer()->getConfig()->getOption('api_key')
         );
     }
 
     public function add_api_key()
     {
-        $languages = $this->config->get_languages();
+        $languages = $this->getContainer()->getConfig()->getLanguages();
 
         if ( ( !empty($_POST['api_key'])  ) ) {
             $api_key = $_POST['api_key'];
 
-            $this->config->set_option('api_key', $api_key);
-            $this->api->init();
+            $this->getContainer()->getConfig()->setOption('api_key', $api_key);
+            $this->getContainer()->getApi()->init();
 
             return array(
                 'fwt_languages' =>$languages,
@@ -115,10 +85,9 @@ class Fwt_Admin
         } else {
             return array(
                 'fwt_languages' => $languages,
-                'api_key' => $this->config->get_option('api_key'),
+                'api_key' => $this->getContainer()->getConfig()->getOption('api_key'),
                 'errors' => array('Please set API key')
             );
-
         }        
     }
 }
