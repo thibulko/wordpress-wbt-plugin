@@ -58,7 +58,7 @@ class FwtAdmin extends FwtAbstract
             exit(' Template not found!');
         }
 
-        if (!empty($this->getErrors())) {
+        if (is_wp_error($this->getErrors())) {
             var_dump($this->getErrors());
         }
     }

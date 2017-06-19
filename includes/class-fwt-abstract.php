@@ -11,8 +11,6 @@ class FwtAbstract
         if ($container) {
             $this->container = $container;
         }
-
-        $this->errors = new WP_Error();
     }
 
     public function setContainer($container)
@@ -27,6 +25,10 @@ class FwtAbstract
 
     public function addError($code = null, $message = null, $data = null)
     {
+        if (null === $this->errors) {
+            $this->errors = new WP_Error();
+        }
+
         $this->errors->add($code, $message, $data);
     }
 
