@@ -61,7 +61,7 @@ class FwtConfig extends FwtAbstract
                 $result[$language['id']] = $language;
             }
         }
-    
+
         return $result;
     }
 }

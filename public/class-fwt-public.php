@@ -6,7 +6,7 @@ class FwtPublic extends FwtAbstract
     {
         $current_language = !empty($_GET['lang']) ? $_GET['lang'] : 'en';
 
-        $content = $this->getContainer()->getTranslator()->split($content);
+        $content = $this->container()->get('translator')->split($content);
 
         if (!is_array($content)) {
             return $content;

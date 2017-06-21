@@ -6,10 +6,10 @@ class FwtApi extends FwtAbstract
 
     public function init()
     {
-        $project = $this->getContainer()->getHttpClient()->remoteRequest('project/' . $this->getApiKey());
+        $project = $this->container()->get('client')->remote('project?api_key=' . $this->getApiKey());
 
         if (!empty($project['data']['id'])) {
-            $config = $this->getContainer()->getConfig();
+            $config = $this->container()->get('config');
             $config->setOption('default_language', isset($project['data']['language']) ? $project['data']['language'] : []);
             $config->setOption('languages', isset($project['data']['languages']) ? $project['data']['languages'] : []);
             $config->setOption('updated_at', time());
@@ -31,27 +31,27 @@ class FwtApi extends FwtAbstract
 
     public function refresh()
     {
-        $posts = $this->getContainer()->getTranslator()->getPosts();
+        $posts = $this->getPosts();
 
         if (!empty($posts)) {
             foreach ($posts as $post) {
-                $this->getContainer()->getTranslator()->updatePost($post);
+                $this->updatePost($post);
             }
         }
     }
 
     public function getTranslations()
     {
-        $url = 'project/' . $this->getApiKey() . '/translations/';
+        $url = 'project/translations/';
 
-        $languages = $this->getContainer()->getConfig()->getLanguages();
+        $languages = $this->container()->get('config')->getLanguages();
 
-        $tasks = $this->getContainer()->getConfig()->getOption('tasks');
+        $tasks = $this->container()->get('config')->getOption('tasks');
 
         $cnt = 0;
 
         foreach ($languages as $language) {
-            $data = $this->getContainer()->getHttpClient()->remoteRequest($url . $language['id']);
+            $data = $this->container()->get('client')->remote($url . $language['id'] . '?api_key=' . $this->getApiKey());
 
             if( is_wp_error( $data ) ){
                 $this->log($data->get_error_code() . $data->get_error_message());
@@ -62,7 +62,7 @@ class FwtApi extends FwtAbstract
                 foreach ($data['data']['data'] as $val) {
                     if (!empty($tasks[$val['name']]) && !empty($val['translation'])) {
                         $task = $tasks[$val['name']];
-                        $post = $this->getContainer()->getTranslator()->getPost($task['id']);
+                        $post = $this->getPost($task['id']);
 
                         if (empty($post)) {
                             continue;
@@ -87,7 +87,7 @@ class FwtApi extends FwtAbstract
                         }
                         //$this->dump($post);
 
-                        $this->getContainer()->getTranslator()->updatePost($post);
+                        $this->updatePost($post);
                     }
                 }
             }
@@ -98,19 +98,19 @@ class FwtApi extends FwtAbstract
 
     public function createTasks()
     {
-        $url = 'project/' . $this->getApiKey() . '/tasks/create';
+        $url = 'project/tasks/create?api_key=' . $this->getApiKey();
 
-        $default_language = $this->getContainer()->getConfig()->getOption('default_language');
+        $default_language = $this->container()->get('config')->getOption('default_language');
         $default_language = $default_language['code'];
 
-        $tasks = $this->getContainer()->getConfig()->getOption('tasks');
+        $tasks = $this->container()->get('config')->getOption('tasks');
 
         if (empty($tasks)) {
             $tasks = array();
-            $this->getContainer()->getConfig()->setOption('tasks', $tasks);
+            $this->container()->get('config')->setOption('tasks', $tasks);
         }
 
-        $posts = $this->getContainer()->getTranslator()->getPosts();
+        $posts = $this->getPosts();
 
         if (!empty($posts)) {
             foreach ($posts as $post) {
@@ -122,7 +122,7 @@ class FwtApi extends FwtAbstract
 
                     $key = md5(serialize($task));
 
-                    $this->getContainer()->getHttpClient()->remoteRequest($url, array(
+                    $this->container()->get('client')->remote($url, array(
                         'method' => 'POST',
                         'body' => array(
                             'name' => $key,
@@ -141,7 +141,7 @@ class FwtApi extends FwtAbstract
 
                     $key = md5(serialize($task));
 
-                    $this->getContainer()->getHttpClient()->remoteRequest($url, array(
+                    $this->container()->get('client')->remote($url, array(
                         'method' => 'POST',
                         'body' => array(
                             'name' => $key,
@@ -154,7 +154,7 @@ class FwtApi extends FwtAbstract
             }
         }
 
-        $this->getContainer()->getConfig()->setOption('tasks', $tasks);
+        $this->container()->get('config')->setOption('tasks', $tasks);
 
         return count($tasks);
     }
@@ -162,7 +162,7 @@ class FwtApi extends FwtAbstract
     public function getApiKey()
     {
         if (null === $this->api_key) {
-            $this->api_key = $this->getContainer()->getConfig()->getOption('api_key');
+            $this->api_key = $this->container()->get('config')->getOption('api_key');
         }
         return $this->api_key;
     }

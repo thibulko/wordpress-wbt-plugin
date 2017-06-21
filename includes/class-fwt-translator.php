@@ -1,7 +1,19 @@
 <?php
 
-class FwtTranslator extends FwtAbstract
+class FwtTranslator
 {
+    protected $languages = [];
+
+    public function setLanguages($languages)
+    {
+        $this->languages = $languages;
+    }
+
+    public function getLanguages()
+    {
+        return $this->languages;
+    }
+
     /**
      *  Join functions
      *
@@ -51,8 +63,7 @@ class FwtTranslator extends FwtAbstract
     {
         $result = array();
         $current_language = false;
-
-        $languages = $this->getContainer()->getConfig()->getLanguages();
+        $languages = $this->getLanguages();
 
         if (empty($languages)) {
             return $blocks;
@@ -150,56 +161,5 @@ class FwtTranslator extends FwtAbstract
         }
 
         return $result;
-    }
-
-    public function getPosts()
-    {
-        $query = new WP_Query();
-
-        $posts = $query->query(array(
-            'numberposts' => '-1'
-        ));
-
-        $result = array();
-
-        if (!empty($posts)) {
-            foreach ($posts as $post) {
-                $result[$post->ID] = array(
-                    'ID' => $post->ID,
-                    'post_content' => $this->split($post->post_content),
-                    'post_title' => $this->split($post->post_title),
-                );
-            }
-        }
-
-        return $result;
-    }
-
-    public function getPost($id)
-    {
-        $post = get_post($id);
-
-        if (!empty($post)) {
-            return array(
-                'ID' => $post->ID,
-                'post_content' => $this->split($post->post_content),
-                'post_title' => $this->split($post->post_title),
-            );
-        }
-
-        return array();
-    }
-
-    public function updatePost($row)
-    {
-        if (is_array($row['post_title'])) {
-            $row['post_title'] = $this->join($row['post_title']);
-        }
-
-        if (is_array($row['post_content'])) {
-            $row['post_content'] = $this->join($row['post_content']);
-        }
-
-        wp_update_post( $row );
     }
 }

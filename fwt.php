@@ -15,8 +15,11 @@ if ( ! defined( 'WPINC' ) ) {
  * Begins execution of the plugin.
  */
 function run_fwt() {
+    global $wpdb;
+
     require_once dirname( __FILE__ ) . '/includes/class-fwt-container.php';
     $container = new FwtContainer();
+    $container->set('wpdb', $wpdb);
 
     require_once dirname( __FILE__ ) . '/includes/class-fwt.php';
     $plugin = new Fwt($container);

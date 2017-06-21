@@ -9,7 +9,7 @@ class FwtHttpClient extends FwtAbstract
         'user-agent' => 'WEB Translator'
     );
 
-    public function remoteRequest($url, $params = [])
+    public function remote($url, $params = [])
     {
         $url = rtrim(self::BASE_URL, '/') . '/' . $url;
 
@@ -19,7 +19,7 @@ class FwtHttpClient extends FwtAbstract
         $mesg = wp_remote_retrieve_response_message( $request );
         $body = json_decode(wp_remote_retrieve_body( $request ), true );
 
-        //$this->log($body);
+        //$this->log($url);
 
         if ( 200 != $code && !empty( $mesg ) ) {
             $this->addError($code, $mesg);

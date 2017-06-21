@@ -27,12 +27,12 @@ class FwtAdmin extends FwtAbstract
                 break;
 
             case 'export':
-                $cnt = $this->getContainer()->getApi()->export();
+                $cnt = $this->container()->get('api')->export();
                 echo 'Export ' . $cnt . ' abstract names.';
                 break;
 
             case 'import':
-                $cnt = $this->getContainer()->getApi()->import();
+                $cnt = $this->container()->get('api')->import();
                 echo 'Import ' . $cnt . ' translation values.';
                 break;
 
@@ -64,22 +64,22 @@ class FwtAdmin extends FwtAbstract
     }
 
     public function dashboard()
-    {
+    {   //$this->log($this->getTerms());
         return array(
-            'fwt_languages' => $this->getContainer()->getConfig()->getLanguages(),
-            'api_key' => $this->getContainer()->getConfig()->getOption('api_key')
+            'fwt_languages' => $this->container()->get('config')->getLanguages(),
+            'api_key' => $this->container()->get('config')->getOption('api_key')
         );
     }
 
     public function add_api_key()
     {
-        $languages = $this->getContainer()->getConfig()->getLanguages();
+        $languages = $this->container()->get('config')->getLanguages();
 
         if ( ( !empty($_POST['api_key'])  ) ) {
             $api_key = $_POST['api_key'];
 
-            $this->getContainer()->getConfig()->setOption('api_key', $api_key);
-            $this->getContainer()->getApi()->init();
+            $this->container()->get('config')->setOption('api_key', $api_key);
+            $this->container()->get('api')->init();
 
             return array(
                 'fwt_languages' =>$languages,
@@ -89,7 +89,7 @@ class FwtAdmin extends FwtAbstract
         } else {
             return array(
                 'fwt_languages' => $languages,
-                'api_key' => $this->getContainer()->getConfig()->getOption('api_key'),
+                'api_key' => $this->container()->get('config')->getOption('api_key'),
                 'errors' => array('Please set API key')
             );
         }        

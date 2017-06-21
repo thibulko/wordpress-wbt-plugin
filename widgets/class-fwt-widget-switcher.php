@@ -24,8 +24,8 @@ class FwtWidgetSwitcher extends WP_Widget {
         
         $tmp = '<label>Language</label><select  onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);" style="width:100%;">';
             $tmp .= '<option value="">--------</option>';
-        if( !empty($this->get_available_langs()) ){
-            foreach( $this->get_available_langs() as $lang ){
+        if( !empty($this->languages()) ){
+            foreach( $this->languages() as $lang ){
                 $tmp .= '<option value="'.$this->get_link().'?lang='.$lang['code'].'">'.$lang['name'].'</option>';
             }
         }
@@ -34,9 +34,9 @@ class FwtWidgetSwitcher extends WP_Widget {
         echo $tmp;
     }
 
-    private function get_available_langs()
+    private function languages()
     {
-        return $this->container->getConfig()->getLanguages();
+        return $this->container->get('config')->getLanguages();
     }
 
     private function get_link()
