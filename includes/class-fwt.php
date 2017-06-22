@@ -33,7 +33,11 @@ class Fwt extends FwtAbstract
 
         // HttpClient
         require_once dirname( __FILE__ ) . '/class-fwt-http-client.php';
-        $this->container()->set('client', new FwtHttpClient());
+        $client = new FwtHttpClient();
+        if (defined('API_URL')) {
+            $client->setBaseUrl(API_URL);
+        }
+        $this->container()->set('client', $client);
 
         // Translator
         require_once dirname( __FILE__ ) . '/class-fwt-translator.php';
