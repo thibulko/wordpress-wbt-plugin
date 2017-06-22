@@ -65,6 +65,8 @@ class Fwt extends FwtAbstract
         $plugin = new FwtPublic($this->container());
         $this->container()->get('loader')->add_action( 'the_content', $plugin, 'the_content' );
         $this->container()->get('loader')->add_action( 'the_title', $plugin, 'the_content' );
+        $this->container()->get('loader')->add_action( 'wp_list_categories', $plugin, 'the_content' );
+        $this->container()->get('loader')->add_action( 'the_tags', $plugin, 'the_content' );
     }
 
     private function defineWidgets()

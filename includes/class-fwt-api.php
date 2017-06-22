@@ -15,7 +15,7 @@ class FwtApi extends FwtAbstract
             $config->setOption('updated_at', time());
             $config->setOption('tasks', []);
 
-            $this->refresh();
+            //$this->refresh();
         }
     }
 
@@ -46,7 +46,7 @@ class FwtApi extends FwtAbstract
 
         $languages = $this->container()->get('config')->getLanguages();
 
-        $tasks = $this->container()->get('config')->getOption('tasks');
+        $wp_tasks = $this->container()->get('config')->getOption('tasks');
 
         $cnt = 0;
 
@@ -60,34 +60,40 @@ class FwtApi extends FwtAbstract
 
             if (!empty($data['data']['data'])) {
                 foreach ($data['data']['data'] as $val) {
-                    if (!empty($tasks[$val['name']]) && !empty($val['translation'])) {
-                        $task = $tasks[$val['name']];
-                        $post = $this->getPost($task['id']);
-
-                        if (empty($post)) {
-                            continue;
-                        }
+                    if (!empty($wp_tasks[$val['name']]) && !empty($val['translation'])) {
+                        $task = $wp_tasks[$val['name']];
 
                         switch ($task['type']) {
                             case 'post_title': {
-                                if (isset($post['post_title'][$language['code']])) {
-                                    $post['post_title'][$language['code']] = $val['translation']['value'];
+                                $item = $this->getPost($task['id']);
+                                if (isset($item['post_title'][$language['code']])) {
+                                    $item['post_title'][$language['code']] = $val['translation']['value'];
+                                    $this->updatePost($item);
                                     $cnt++;
                                 }
-                            }
-                                break;
+                            } break;
 
                             case 'post_content': {
-                                if (isset($post['post_content'][$language['code']])) {
-                                    $post['post_content'][$language['code']] = $val['translation']['value'];
+                                $item = $this->getPost($task['id']);
+                                if (isset($item['post_content'][$language['code']])) {
+                                    $item['post_content'][$language['code']] = $val['translation']['value'];
+                                    $this->updatePost($item);
                                     $cnt++;
                                 }
-                            }
-                                break;
+                            } break;
+
+                            case 'term_name': {
+                                $item = $this->getTerm($task['id']);
+                                if (isset($item['name'][$language['code']])) {
+                                    $item['name'][$language['code']] = $val['translation']['value'];
+                                    $this->updateTerm($item);
+                                    $cnt++;
+                                }
+                            } break;
                         }
                         //$this->dump($post);
 
-                        $this->updatePost($post);
+                        //$this->updatePost($post);
                     }
                 }
             }
@@ -110,6 +116,7 @@ class FwtApi extends FwtAbstract
             $this->container()->get('config')->setOption('tasks', $tasks);
         }
 
+        // Posts
         $posts = $this->getPosts();
 
         if (!empty($posts)) {
@@ -146,6 +153,32 @@ class FwtApi extends FwtAbstract
                         'body' => array(
                             'name' => $key,
                             'value' => $post['post_title'][$default_language],
+                        )
+                    ));
+
+                    $tasks[$key] = $task;
+                }
+            }
+        }
+
+        // Terms
+        $terms = $this->getTerms();
+
+        if (!empty($terms)) {
+            foreach ($terms as $term_id => $term) {
+                if (!empty($term[$default_language])) {
+                    $task = array(
+                        'id' => $term_id,
+                        'type' => 'term_name',
+                    );
+
+                    $key = md5(serialize($task));
+
+                    $this->container()->get('client')->remote($url, array(
+                        'method' => 'POST',
+                        'body' => array(
+                            'name' => $key,
+                            'value' => $term[$default_language],
                         )
                     ));
 

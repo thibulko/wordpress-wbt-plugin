@@ -64,7 +64,7 @@ class FwtAdmin extends FwtAbstract
     }
 
     public function dashboard()
-    {   //$this->log($this->getTerms());
+    {   //$this->log($this->getTerm(2));
         return array(
             'fwt_languages' => $this->container()->get('config')->getLanguages(),
             'api_key' => $this->container()->get('config')->getOption('api_key')

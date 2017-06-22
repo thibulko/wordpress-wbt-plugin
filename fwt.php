@@ -16,6 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function run_fwt() {
     global $wpdb;
+    $wpdb->show_errors = true;
 
     require_once dirname( __FILE__ ) . '/includes/class-fwt-container.php';
     $container = new FwtContainer();

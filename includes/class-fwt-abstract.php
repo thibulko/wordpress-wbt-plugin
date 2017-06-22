@@ -79,6 +79,38 @@ class FwtAbstract
         return $result;
     }
 
+    public function getTerm($id)
+    {
+        $translator = $this->container()->get('translator');
+
+        $term = WP_Term::get_instance( $id );
+
+        if (!empty($term)) {
+            $term = $term->to_array();
+            $term['name'] =  $translator->split($term['name']);
+            return $term;
+        }
+
+        return array();
+    }
+
+    public function updateTerm($row)
+    {
+        $translator = $this->container()->get('translator');
+        $db = $this->container()->get('wpdb');
+        $where = array('term_id' => $row['term_id']);
+
+        $data = array();
+
+        if (is_array($row['name'])) {
+            $data['name'] = $translator->join($row['name']);
+        }
+
+        if (!empty($data)) {
+            $db->update($db->prefix . 'terms', $data, $where);
+        }
+    }
+
     public function getPost($id)
     {
         $translator = $this->container()->get('translator');
