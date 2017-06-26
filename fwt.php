@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-define('API_URL', 'http://fnukraine.pp.ua/api/v2/');
+define('API_URL', 'http://192.168.88.149:8080/api/v2/');
 
 /**
  * Begins execution of the plugin.

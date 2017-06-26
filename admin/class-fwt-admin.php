@@ -23,17 +23,15 @@ class FwtAdmin extends FwtAbstract
                 break;
 
             case 'add_key':
-                $this->render('dashboard.view.php', 'add_api_key');
+                $this->render('dashboard.view.php', 'add_key');
                 break;
 
             case 'export':
-                $cnt = $this->container()->get('api')->export();
-                echo 'Export ' . $cnt . ' abstract names.';
+                $this->render('dashboard.view.php', 'export');
                 break;
 
             case 'import':
-                $cnt = $this->container()->get('api')->import();
-                echo 'Import ' . $cnt . ' translation values.';
+                $this->render('dashboard.view.php', 'import');
                 break;
 
             default:
@@ -42,7 +40,7 @@ class FwtAdmin extends FwtAbstract
         }
     }
 
-    public function render($page, $controller = null)
+    protected function render($page, $controller = null)
     {
         ob_start();
         $file = dirname(__FILE__) . '/views/' . strtolower($page);
@@ -63,35 +61,53 @@ class FwtAdmin extends FwtAbstract
         }
     }
 
-    public function dashboard()
-    {   //$this->log($this->getTerm(2));
+    protected function dashboard()
+    {
         return array(
             'fwt_languages' => $this->container()->get('config')->getLanguages(),
             'api_key' => $this->container()->get('config')->getOption('api_key')
         );
     }
 
-    public function add_api_key()
+    protected function export()
     {
-        $languages = $this->container()->get('config')->getLanguages();
+        $cnt = $this->container()->get('api')->export();
 
-        if ( ( !empty($_POST['api_key'])  ) ) {
+        return array(
+            'fwt_languages' => $this->container()->get('config')->getLanguages(),
+            'api_key' => $this->container()->get('api')->init($_POST['api_key']),
+            'success' => array('Export ' . $cnt . ' translation values.')
+        );
+    }
+
+    protected function import()
+    {
+        $cnt = $this->container()->get('api')->import();
+
+        return array(
+            'fwt_languages' => $this->container()->get('config')->getLanguages(),
+            'api_key' => $this->container()->get('api')->init($_POST['api_key']),
+            'success' => array('Import ' . $cnt . ' translation values.')
+        );
+    }
+
+    protected function add_key()
+    {
+        if ((!empty($_POST['api_key']))) {
             $api_key = $_POST['api_key'];
-
-            $this->container()->get('config')->setOption('api_key', $api_key);
-            $this->container()->get('api')->init();
+            $this->container()->get('api')->init($_POST['api_key']);
 
             return array(
-                'fwt_languages' =>$languages,
+                'fwt_languages' => $this->container()->get('config')->getLanguages(),
                 'api_key' => $api_key,
                 'success' => array('Key was added')
             );
-        } else {
-            return array(
-                'fwt_languages' => $languages,
-                'api_key' => $this->container()->get('config')->getOption('api_key'),
-                'errors' => array('Please set API key')
-            );
-        }        
+        }
+
+        return array(
+            'fwt_languages' => $this->container()->get('config')->getLanguages(),
+            'api_key' => $this->container()->get('config')->getOption('api_key'),
+            'errors' => array('Please set API key')
+        );
     }
 }

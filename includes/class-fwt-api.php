@@ -4,18 +4,17 @@ class FwtApi extends FwtAbstract
 {
     protected $api_key;
 
-    public function init()
+    public function init($api_key)
     {
         $project = $this->container()->get('client')->remote('project?api_key=' . $this->getApiKey());
 
         if (!empty($project['data']['id'])) {
             $config = $this->container()->get('config');
+            $config->setOption('api_key', $api_key);
             $config->setOption('default_language', isset($project['data']['language']) ? $project['data']['language'] : []);
             $config->setOption('languages', isset($project['data']['languages']) ? $project['data']['languages'] : []);
             $config->setOption('updated_at', time());
             $config->setOption('tasks', []);
-
-            //$this->refresh();
         }
     }
 

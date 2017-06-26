@@ -47,21 +47,6 @@ class FwtConfig extends FwtAbstract
 
     public function getLanguages()
     {
-        $result = [];
-
-        $default_language = $this->getOption('default_language');
-        $languages = $this->getOption('languages');
-
-        if (!empty($default_language)) {
-            $result[$default_language['id']] = $default_language;
-        }
-
-        if (!empty($languages)) {
-            foreach ($languages as $language) {
-                $result[$language['id']] = $language;
-            }
-        }
-
-        return $result;
+        return $this->getOption('languages');
     }
 }
