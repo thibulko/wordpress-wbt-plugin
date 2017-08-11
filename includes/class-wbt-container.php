@@ -1,6 +1,6 @@
 <?php
 
-class FwtContainer
+class WbtContainer
 {
     public function set($name, $value)
     {

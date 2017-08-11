@@ -17,9 +17,9 @@
         <?php } ?>
     <?php } ?>
 
-    <h1>FWT Settings</h1>
+    <h1>WBT Settings</h1>
 
-    <form method="POST" action="?page=fwt-settings&amp;action=add_key">
+    <form method="POST" action="?page=wbt-settings&amp;action=add_key">
     <table class="form-table">
         <tbody>
         <tr>
@@ -45,7 +45,7 @@
                 </p>
             </th>
             <td>
-                <a href="?page=fwt-settings&amp;action=export" class="button button-danger">Export to fn.com</a>
+                <a href="?page=wbt-settings&amp;action=export" class="button button-danger">Export to fn.com</a>
             </td>
         </tr>
         <tr>
@@ -57,10 +57,10 @@
             </th>
 
             <td>
-                <a href="?page=fwt-settings&amp;action=import" class="button button-danger">Import from fn.com</a>
+                <a href="?page=wbt-settings&amp;action=import" class="button button-danger">Import from fn.com</a>
             </td>
         </tr>
-        <?php if( !empty($fwt_languages) ): ?>
+        <?php if( !empty($wbt_languages) ): ?>
             <tr>
                 <th>Languages</th>
                 <td>
@@ -71,7 +71,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <?php foreach($fwt_languages as $language): ?>
+                        <?php foreach($wbt_languages as $language): ?>
                             <tr>
                                 <td><?php echo $language['name']; ?></td>
                             </tr>

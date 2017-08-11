@@ -1,6 +1,6 @@
 <?php
 
-class FwtApi extends FwtAbstract
+class WbtApi extends WbtAbstract
 {
     protected $api_key;
 

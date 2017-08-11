@@ -1,14 +1,14 @@
 <?php
 
-class FwtAdmin extends FwtAbstract
+class WbtAdmin extends WbtAbstract
 {
     public function init_menu ()
     {
         add_options_page(
             'Translation Settings',
-            'FWT Settings',
+            'WBT Settings',
             'manage_options',
-            'fwt-settings',
+            'wbt-settings',
             array($this, 'route')
         );
     }
@@ -66,7 +66,7 @@ class FwtAdmin extends FwtAbstract
     public function dashboard()
     {   //$this->log($this->getTerm(2));
         return array(
-            'fwt_languages' => $this->container()->get('config')->getLanguages(),
+            'wbt_languages' => $this->container()->get('config')->getLanguages(),
             'api_key' => $this->container()->get('config')->getOption('api_key')
         );
     }
@@ -82,13 +82,13 @@ class FwtAdmin extends FwtAbstract
             $this->container()->get('api')->init();
 
             return array(
-                'fwt_languages' =>$languages,
+                'wbt_languages' =>$languages,
                 'api_key' => $api_key,
                 'success' => array('Key was added')
             );
         } else {
             return array(
-                'fwt_languages' => $languages,
+                'wbt_languages' => $languages,
                 'api_key' => $this->container()->get('config')->getOption('api_key'),
                 'errors' => array('Please set API key')
             );

@@ -1,6 +1,6 @@
 <?php
 
-class FwtHttpClient extends FwtAbstract
+class WbtHttpClient extends WbtAbstract
 {
     protected $BASE_URL = '';
 

@@ -1,6 +1,6 @@
 <?php
 
-class FwtAbstract
+class WbtAbstract
 {
     protected $container;
 

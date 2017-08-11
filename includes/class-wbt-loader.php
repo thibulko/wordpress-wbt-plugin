@@ -4,7 +4,7 @@
  * Register all actions and filters for the plugin
  */
 
-class FwtLoader
+class WbtLoader
 {
     /**
      * The array of actions registered with WordPress.

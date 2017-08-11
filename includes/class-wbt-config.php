@@ -1,12 +1,12 @@
 <?php
 
-class FwtConfig extends FwtAbstract
+class WbtConfig extends WbtAbstract
 {
-    const OPTION_NAME = 'fwt_project_params';
+    const OPTION_NAME = 'wbt_project_params';
 
     const VERSION = '0.0.1';
 
-    const PLUGIN_NAME = 'fwt';
+    const PLUGIN_NAME = 'wbt';
 
     public function getVersion()
     {

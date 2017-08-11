@@ -9,8 +9,8 @@ class FwtWidgetSwitcher extends WP_Widget {
         $this->container = $container;
 
         parent::__construct(
-            'fwt_switcher_widget',
-            __('FWT Languages switcher', 'fwt_switcher_widget_domain'),
+            'wbt_switcher_widget',
+            __('WBT Languages switcher', 'wbt_switcher_widget_domain'),
             array(
                 'description' => __('Widget wich add to theme languages switcher')
             )

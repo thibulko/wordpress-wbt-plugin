@@ -1,6 +1,6 @@
 <?php
 
-class FwtTranslator
+class WbtTranslator
 {
     protected $languages = [];
 
