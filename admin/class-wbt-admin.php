@@ -4,9 +4,9 @@ class WbtAdmin extends WbtAbstract
 {
     public function init_menu ()
     {
-        add_options_page(
-            'Translation Settings',
-            'WBT Settings',
+        add_menu_page(
+            'WBTranslator Settings',
+            'WBTranslator',
             'manage_options',
             'wbt-settings',
             array($this, 'route')
@@ -16,7 +16,7 @@ class WbtAdmin extends WbtAbstract
     public function route()
     {
         $route = (empty($_GET['action'])) ? 'dashboard' : $_GET['action'];
-
+        
         switch ($route){
             case 'dashboard':
                 $this->render('dashboard.view.php', 'dashboard');
@@ -27,8 +27,7 @@ class WbtAdmin extends WbtAbstract
                 break;
 
             case 'export':
-                $cnt = $this->container()->get('api')->export();
-                echo 'Export ' . $cnt . ' abstract names.';
+                $this->render('dashboard.view.php', 'export');
                 break;
 
             case 'import':
@@ -63,35 +62,55 @@ class WbtAdmin extends WbtAbstract
         }
     }
 
-    public function dashboard()
-    {   //$this->log($this->getTerm(2));
-        return array(
+    public function dashboard($data = [])
+    {
+        return array_merge($data, array(
             'wbt_languages' => $this->container()->get('config')->getLanguages(),
             'api_key' => $this->container()->get('config')->getOption('api_key')
-        );
+        ));
     }
+    
+    public function export()
+    {
+        $messages = array();
+    
+        try {
+            $cnt = $this->container()->get('api')->export();
 
+            $messages['success'] = array('Export ' . (!empty($cnt) ? $cnt : 0) . ' abstract names.');
+
+        } catch (\Exception $e) {
+            $messages['errors'] = array('Export ERROR: ' . $e->getMessage());
+        }
+    
+        return $this->dashboard(array(
+            'messages' => $messages,
+        ));
+    }
+    
     public function add_api_key()
     {
         $languages = $this->container()->get('config')->getLanguages();
-
-        if ( ( !empty($_POST['api_key'])  ) ) {
+        $api_key = $this->container()->get('config')->getOption('api_key');
+        $messages = array();
+        
+        if (( !empty($_POST['api_key']) )) {
             $api_key = $_POST['api_key'];
 
-            $this->container()->get('config')->setOption('api_key', $api_key);
-            $this->container()->get('api')->init();
-
-            return array(
-                'wbt_languages' =>$languages,
-                'api_key' => $api_key,
-                'success' => array('Key was added')
-            );
-        } else {
-            return array(
-                'wbt_languages' => $languages,
-                'api_key' => $this->container()->get('config')->getOption('api_key'),
-                'errors' => array('Please set API key')
-            );
-        }        
+            try {
+                $this->container()->get('config')->setApiKey($api_key);
+                $this->container()->get('api')->init();
+                $messages['success'] = array('Key was added');
+                $languages = $this->container()->get('config')->getLanguages();
+            } catch (\Exception $e) {
+                $messages['errors'] = array($e->getMessage());
+            }
+        }
+        
+        return array(
+            'wbt_languages' => $languages,
+            'api_key' => $api_key,
+            'messages' => $messages,
+        );
     }
 }

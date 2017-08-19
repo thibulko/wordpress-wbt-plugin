@@ -2,8 +2,8 @@
 /**
  * The plugin bootstrap file
  *
- * Plugin Name: Future WEB Translator
- * Version: 0.0.1
+ * Plugin Name: WBTranslator
+ * Version: 0.0.2
 */
 
 // If this file is called directly, abort.
@@ -11,9 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-define('WBT_API_KEY', '');
-
-define('WBT_API_URL', 'http://wbtranslator.com/api/project/' . WBT_API_KEY);
+define('WBT_API_URL', 'http://wbtranslator.com/api/project/');
 
 /**
  * Begins execution of the plugin.

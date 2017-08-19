@@ -6,14 +6,14 @@ class WbtApi extends WbtAbstract
 
     public function init()
     {
-        $project = $this->container()->get('client')->remote('project?api_key=' . $this->getApiKey());
+        $project = $this->container()->get('client')->remote('/');
 
         if (!empty($project['data']['id'])) {
             $config = $this->container()->get('config');
             $config->setOption('default_language', isset($project['data']['language']) ? $project['data']['language'] : []);
             $config->setOption('languages', isset($project['data']['languages']) ? $project['data']['languages'] : []);
             $config->setOption('updated_at', time());
-            $config->setOption('tasks', []);
+            $config->setOption('abstractions', []);
 
             //$this->refresh();
         }
@@ -21,7 +21,7 @@ class WbtApi extends WbtAbstract
 
     public function export()
     {
-        return $this->createTasks();
+        return $this->createAbstractions();
     }
 
     public function import()
@@ -102,18 +102,18 @@ class WbtApi extends WbtAbstract
         return $cnt;
     }
 
-    public function createTasks()
+    public function createAbstractions()
     {
-        $url = 'project/tasks/create?api_key=' . $this->getApiKey();
+        $url = '/abstractions/create';
 
         $default_language = $this->container()->get('config')->getOption('default_language');
         $default_language = $default_language['code'];
 
-        $tasks = $this->container()->get('config')->getOption('tasks');
+        $abstractions = $this->container()->get('config')->getOption('abstractions');
 
-        if (empty($tasks)) {
-            $tasks = array();
-            $this->container()->get('config')->setOption('tasks', $tasks);
+        if (empty($abstractions)) {
+            $abstractions = array();
+            $this->container()->get('config')->setOption('abstractions', $abstractions);
         }
 
         // Posts
@@ -136,8 +136,8 @@ class WbtApi extends WbtAbstract
                             'value' => $post['post_content'][$default_language],
                         )
                     ));
-
-                    $tasks[$key] = $task;
+    
+                    $abstractions[$key] = $task;
                 }
 
                 if (!empty($post['post_title'][$default_language])) {
@@ -155,8 +155,8 @@ class WbtApi extends WbtAbstract
                             'value' => $post['post_title'][$default_language],
                         )
                     ));
-
-                    $tasks[$key] = $task;
+    
+                    $abstractions[$key] = $task;
                 }
             }
         }
@@ -181,22 +181,14 @@ class WbtApi extends WbtAbstract
                             'value' => $term[$default_language],
                         )
                     ));
-
-                    $tasks[$key] = $task;
+    
+                    $abstractions[$key] = $task;
                 }
             }
         }
 
-        $this->container()->get('config')->setOption('tasks', $tasks);
+        $this->container()->get('config')->setOption('abstractions', $abstractions);
 
-        return count($tasks);
-    }
-
-    public function getApiKey()
-    {
-        if (null === $this->api_key) {
-            $this->api_key = $this->container()->get('config')->getOption('api_key');
-        }
-        return $this->api_key;
+        return count($abstractions);
     }
 }

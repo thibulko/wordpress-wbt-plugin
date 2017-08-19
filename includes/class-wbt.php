@@ -10,6 +10,8 @@ class WBTranslator extends WbtAbstract
 {
     /**
      * Define the core functionality of the plugin.
+     *
+     * @param null $container
      */
     public function __construct($container = null)
     {
@@ -18,7 +20,7 @@ class WBTranslator extends WbtAbstract
         $this->init();
         $this->defineAdminHooks();
         $this->definePublicHooks();
-        $this->defineWidgets();
+        //$this->defineWidgets();
     }
 
     private function init()
@@ -33,10 +35,7 @@ class WBTranslator extends WbtAbstract
 
         // HttpClient
         require_once dirname( __FILE__ ) . '/class-wbt-http-client.php';
-        $client = new WbtHttpClient();
-        if (defined('API_URL')) {
-            $client->setBaseUrl(API_URL);
-        }
+        $client = new WbtHttpClient($this->container());
         $this->container()->set('client', $client);
 
         // Translator
@@ -67,6 +66,7 @@ class WBTranslator extends WbtAbstract
     private function definePublicHooks()
     {
         require_once dirname( __FILE__ ) . '/../public/class-wbt-public.php';
+        
         $plugin = new WbtPublic($this->container());
         $this->container()->get('loader')->add_action( 'the_content', $plugin, 'the_content' );
         $this->container()->get('loader')->add_action( 'the_title', $plugin, 'the_content' );
@@ -74,12 +74,12 @@ class WBTranslator extends WbtAbstract
         $this->container()->get('loader')->add_action( 'the_tags', $plugin, 'the_content' );
     }
 
-    private function defineWidgets()
+    /*private function defineWidgets()
     {
         require_once dirname( __FILE__ ) . '/../widgets/class-wbt-widget-switcher.php';
         $switcher = new WbtWidgetSwitcher($this->container());
         $this->container()->get('loader')->add_action( 'widgets_init', $switcher, 'init' );
-    }
+    }*/
 
     /**
      * Run the loader to execute all of the hooks with WordPress.

@@ -2,17 +2,10 @@
 
 class WbtConfig extends WbtAbstract
 {
-    const OPTION_NAME = 'wbt_project_params';
-
-    const VERSION = '0.0.1';
+    const OPTION_NAME = 'wbt_options';
 
     const PLUGIN_NAME = 'wbt';
-
-    public function getVersion()
-    {
-        return self::VERSION;
-    }
-
+    
     public function getPluginName()
     {
         return self::PLUGIN_NAME;
@@ -63,5 +56,15 @@ class WbtConfig extends WbtAbstract
         }
 
         return $result;
+    }
+    
+    public function getApiKey()
+    {
+        return $this->getOption('api_key');
+    }
+    
+    public function setApiKey($api_key)
+    {
+        return $this->setOption('api_key', $api_key);
     }
 }
