@@ -4,7 +4,7 @@
 .classpath
 *.launch
 .settings/
-
+composer.lock
 
 #System Files
 .DS_Store
