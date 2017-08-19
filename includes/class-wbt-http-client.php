@@ -25,7 +25,7 @@ class WbtHttpClient extends WbtAbstract
 
     public function getBaseUrl()
     {
-        return rtrim($this->baseUrl, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        return rtrim($this->baseUrl, '/') . '/';
     }
     
     public function getApiKey()
@@ -35,7 +35,7 @@ class WbtHttpClient extends WbtAbstract
     
     public function remote($url, $params = [])
     {
-        $url = $this->getBaseUrl() . $this->getApiKey() . DIRECTORY_SEPARATOR . ltrim($url, DIRECTORY_SEPARATOR);
+        $url = $this->getBaseUrl() . $this->getApiKey() . '/' . ltrim($url, '/');
 
         $request = wp_remote_request($url, array_merge($this->params, $params));
 
