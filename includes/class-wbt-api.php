@@ -42,58 +42,59 @@ class WbtApi extends WbtAbstract
 
     public function getTranslations()
     {
-        $url = 'project/translations/';
-
-        $languages = $this->container()->get('config')->getLanguages();
-
-        $wp_tasks = $this->container()->get('config')->getOption('tasks');
+        $wp_tasks = $this->container()->get('config')->getOption('abstractions');
 
         $cnt = 0;
 
-        foreach ($languages as $language) {
-            $data = $this->container()->get('client')->remote($url . $language['id'] . '?api_key=' . $this->getApiKey());
+        $data = $this->container()->get('client')->remote('/translations');
 
-            if( is_wp_error( $data ) ){
-                $this->log($data->get_error_code() . $data->get_error_message());
-                break;
+        if (!empty($data['data'])) {
+            $abstractions = [];
+            foreach ($data['data'] as $d) {
+                $abstractions[$d['abstract_name']][$d['language']] = $d['original_value'];
+                
+                if (!empty($d['translations'])) {
+                    foreach ($d['translations'] as $trans) {
+                        $abstractions[$d['abstract_name']][$trans['language']] = $trans['value'];
+                    }
+                }
             }
-
-            if (!empty($data['data']['data'])) {
-                foreach ($data['data']['data'] as $val) {
-                    if (!empty($wp_tasks[$val['name']]) && !empty($val['translation'])) {
-                        $task = $wp_tasks[$val['name']];
-
-                        switch ($task['type']) {
-                            case 'post_title': {
-                                $item = $this->getPost($task['id']);
-                                if (isset($item['post_title'][$language['code']])) {
-                                    $item['post_title'][$language['code']] = $val['translation']['value'];
-                                    $this->updatePost($item);
-                                    $cnt++;
-                                }
-                            } break;
-
-                            case 'post_content': {
-                                $item = $this->getPost($task['id']);
-                                if (isset($item['post_content'][$language['code']])) {
-                                    $item['post_content'][$language['code']] = $val['translation']['value'];
-                                    $this->updatePost($item);
-                                    $cnt++;
-                                }
-                            } break;
-
-                            case 'term_name': {
-                                $item = $this->getTerm($task['id']);
-                                if (isset($item['name'][$language['code']])) {
-                                    $item['name'][$language['code']] = $val['translation']['value'];
-                                    $this->updateTerm($item);
-                                    $cnt++;
-                                }
-                            } break;
+            
+            if (!empty($abstractions)) {
+                foreach ($abstractions as $k => $languages) {
+                    if (!empty($wp_tasks[$k])) {
+                        $task = $wp_tasks[$k];
+    
+                        foreach($languages as $language => $translation) {
+                            switch ($task['type']) {
+                                case 'post_title':
+                                    $item = $this->getPost($task['id']);
+                                    if (isset($item['post_title'][$language])) {
+                                        $item['post_title'][$language] = $translation;
+                                        $this->updatePost($item);
+                                        $cnt++;
+                                    }
+                                    break;
+        
+                                case 'post_content':
+                                    $item = $this->getPost($task['id']);
+                                    if (isset($item['post_content'][$language])) {
+                                        $item['post_content'][$language] = $translation;
+                                        $this->updatePost($item);
+                                        $cnt++;
+                                    }
+                                    break;
+        
+                                case 'term_name':
+                                    $item = $this->getTerm($task['id']);
+                                    if (isset($item['name'][$language])) {
+                                        $item['name'][$language] = $translation;
+                                        $this->updateTerm($item);
+                                        $cnt++;
+                                    }
+                                    break;
+                            }
                         }
-                        //$this->dump($post);
-
-                        //$this->updatePost($post);
                     }
                 }
             }

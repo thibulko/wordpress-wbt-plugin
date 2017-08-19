@@ -31,8 +31,7 @@ class WbtAdmin extends WbtAbstract
                 break;
 
             case 'import':
-                $cnt = $this->container()->get('api')->import();
-                echo 'Import ' . $cnt . ' translation values.';
+                $this->render('dashboard.view.php', 'import');
                 break;
 
             default:
@@ -54,7 +53,7 @@ class WbtAdmin extends WbtAbstract
             ob_end_clean();
             echo $ret;
         }else{
-            exit(' Template not found!');
+            exit('Template not found!');
         }
 
         if (is_wp_error($this->getErrors())) {
@@ -75,14 +74,28 @@ class WbtAdmin extends WbtAbstract
         $messages = array();
     
         try {
-            $cnt = $this->container()->get('api')->export();
-
-            $messages['success'] = array('Export ' . (!empty($cnt) ? $cnt : 0) . ' abstract names.');
-
+            $result = $this->container()->get('api')->export();
+            $messages['success'] = array('Export ' . (!empty($result) ? $result : 0) . ' abstract names.');
         } catch (\Exception $e) {
-            $messages['errors'] = array('Export ERROR: ' . $e->getMessage());
+            $messages['errors'] = array('ERROR Export: ' . $e->getMessage());
         }
     
+        return $this->dashboard(array(
+            'messages' => $messages,
+        ));
+    }
+    
+    public function import()
+    {
+        $messages = array();
+        
+        try {
+            $result = $this->container()->get('api')->import();
+            $messages['success'] = array('Import ' . (!empty($result) ? $result : 0) . ' translation values.');
+        } catch (\Exception $e) {
+            $messages['errors'] = array('ERROR Import: ' . $e->getMessage());
+        }
+        
         return $this->dashboard(array(
             'messages' => $messages,
         ));
