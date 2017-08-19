@@ -47,6 +47,8 @@ class WbtHttpClient extends WbtAbstract
             if (!empty($body['message'])) {
                 if (is_array($body['message'])) {
                     $mesg = reset($body['message']);
+                } else {
+                    $mesg = $body['message'];
                 }
             }
             throw new \Exception((!empty($mesg) ? $mesg : 'Unknown error!'), $code);
