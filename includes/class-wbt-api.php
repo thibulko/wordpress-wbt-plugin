@@ -19,6 +19,53 @@ class WbtApi extends WbtAbstract
         }
     }
 
+    public function themeGroup($theme)
+    {
+        $parentGroup = array(
+            'name' => get_theme_roots(),
+        );
+
+        $group = array(
+            'name' => $theme,
+            'parent' => $parentGroup,
+        );
+
+        return $group;
+    }
+
+    public function themesWithLanguages()
+    {
+        $result = array();
+
+        $default_language = $this->container()->get('config')->getOption('default_language');
+        if (!empty($default_language['code'])) {
+            $language_code = strtolower($default_language['code']) . '_' . strtoupper($default_language['code']);
+        }
+
+        $themes = wp_get_themes();
+
+        foreach ($themes as $key => $theme) {
+            $language_path = $theme->theme_root . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR . 'languages';
+
+            if (!empty($language_code) && file_exists($language_path . DIRECTORY_SEPARATOR . $language_code . '.po')) {
+                $lang_file = $language_path . DIRECTORY_SEPARATOR . $language_code . '.po';
+            } elseif (file_exists($language_path . DIRECTORY_SEPARATOR . $key . '.pot')) {
+                $lang_file = $language_path . DIRECTORY_SEPARATOR . $key . '.pot';
+            } else {
+                $lang_file = null;
+            }
+
+            if (!empty($lang_file)) {
+                $result[$key] = array(
+                    'name' => $theme,
+                    'lang_file' => $lang_file,
+                );
+            }
+        }
+
+        return $result;
+    }
+
     public function export()
     {
         return $this->createAbstractions();
@@ -38,6 +85,21 @@ class WbtApi extends WbtAbstract
                 $this->updatePost($post);
             }
         }
+    }
+
+    public function uploadLangFile($filename, $group = null)
+    {
+        $this->container()->get('client')->remote('/abstractions/upload', array(
+            'method' => 'POST',
+            'headers' => array(
+                'content-type' => 'multipart/form-data',
+            ),
+            'file' => $filename,
+            /*'body' => array(
+                'name' => $key,
+                'value' => $post['post_content'][$default_language],
+            )*/
+        ));
     }
 
     public function getTranslations()

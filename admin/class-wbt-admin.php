@@ -16,7 +16,7 @@ class WbtAdmin extends WbtAbstract
     public function route()
     {
         $route = (empty($_GET['action'])) ? 'dashboard' : $_GET['action'];
-        
+
         switch ($route){
             case 'dashboard':
                 $this->render('dashboard.view.php', 'dashboard');
@@ -65,7 +65,8 @@ class WbtAdmin extends WbtAbstract
     {
         return array_merge($data, array(
             'wbt_languages' => $this->container()->get('config')->getLanguages(),
-            'api_key' => $this->container()->get('config')->getOption('api_key')
+            'api_key' => $this->container()->get('config')->getOption('api_key'),
+            'themes' => $this->container()->get('api')->themesWithLanguages(),
         ));
     }
     

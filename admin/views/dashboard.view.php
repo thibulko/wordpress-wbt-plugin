@@ -72,4 +72,42 @@
         </tbody>
     </table>
     </form>
+
+    <form method="POST" action="?page=wbt-settings&amp;action=save">
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th>What to translate?</th>
+                    <td>
+                        <ul>
+                            <li>
+                                <label>Themes</label>
+                                <ul style="margin-left: 25px;">
+                                    <?php foreach($themes as $theme): ?>
+                                        <li><label><input type="checkbox"> <?php print $theme['name']; ?></label></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </li>
+                            <li>
+                                <label><input type="checkbox"> Posts</label>
+                            </li>
+                            <li>
+                                <label><input type="checkbox"> Pages</label>
+                            </li>
+                            <li>
+                                <label><input type="checkbox"> Categories</label>
+                            </li>
+                            <li>
+                                <label><input type="checkbox"> Tags</label>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td><button class="button button-primary">Save</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
 </div>
