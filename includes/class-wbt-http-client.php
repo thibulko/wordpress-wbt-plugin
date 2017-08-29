@@ -32,17 +32,22 @@ class WbtHttpClient extends WbtAbstract
     {
         return $this->container()->get('config')->getApiKey();
     }
-    
-    public function remote($url, $params = [])
+
+    public function getUrl($endpoint)
     {
-        $url = $this->getBaseUrl() . $this->getApiKey() . '/' . ltrim($url, '/');
+        return $this->getBaseUrl() . $this->getApiKey() . '/' . ltrim($endpoint, '/');
+    }
+    
+    public function remote($endpoint, $params = [])
+    {
+        $url = $this->getUrl($endpoint);
 
         $request = wp_remote_request($url, array_merge($this->params, $params));
 
         $code = wp_remote_retrieve_response_code( $request );
         $mesg = wp_remote_retrieve_response_message( $request );
         $body = json_decode(wp_remote_retrieve_body( $request ), true );
-    
+
         if (200 != $code) {
             if (!empty($body['message'])) {
                 if (is_array($body['message'])) {
@@ -55,5 +60,24 @@ class WbtHttpClient extends WbtAbstract
         }
         
         return $body;
+    }
+
+    public static function normalize_multipart_params($data)
+    {
+        $output = array();
+
+        foreach ($data as $key => $value) {
+            if (!is_array($value)) {
+                $output[] = ['name' => $key, 'contents' => $value];
+                continue;
+            }
+
+            foreach($value as $multiKey => $multiValue) {
+                $multiName = $key . '[' .$multiKey . ']' . (is_array($multiValue) ? '[' . key($multiValue) . ']' : '' ) . '';
+                $output[] = ['name' => $multiName, 'contents' => (is_array($multiValue) ? reset($multiValue) : $multiValue)];
+            }
+        }
+
+        return $output;
     }
 }

@@ -19,7 +19,95 @@ class WbtApi extends WbtAbstract
         }
     }
 
-    public function themeGroup($theme)
+    public function uploadLangFile($filename, $group = null)
+    {
+        //$filename = '/www/wordpress/wp-content/themes/activello/languages/ru_RU.po';
+        //$filename = '/www/wordpress/wp-content/themes/parallel/languages/parallel.pot';
+        //$group = array('name' => 'testGroup', 'parent' => array('name' => 'parentGroup'));
+
+        $params = array();
+        $client = $this->container()->get('client');
+
+        $boundary = wp_generate_password(24);
+
+        if ($group) {
+            $params['group'] = $group;
+        }
+
+        $headers = array(
+            'Content-Type' => 'multipart/form-data; boundary=' . $boundary,
+            'Cache-Control' => 'no-cache',
+        );
+
+        $payload = $this->create_payload($boundary, $filename, $params);
+
+        $body = $client->remote('/abstractions/upload', array(
+            'method' => 'POST',
+            'headers' => $headers,
+            'body' => $payload,
+        ));
+
+        return !empty($body['data']) ? count($body['data']) : 0;
+    }
+
+    protected function create_payload($boundary, $filename, $params = array())
+    {
+        $payload = '';
+
+        if (!empty($params)) {
+            $params = WbtHttpClient::normalize_multipart_params($params) ;
+
+            foreach ($params as $param) {
+                $payload .= '--' . $boundary;
+                $payload .= "\r\n";
+                $payload .= 'Content-Disposition: form-data; name="' . $param['name'] . '"';
+                $payload .= "\r\n\r\n";
+                $payload .= $param['contents'];
+                $payload .= "\r\n";
+            }
+        }
+
+        if ($filename) {
+            $payload .= '--' . $boundary;
+            $payload .= "\r\n";
+            $payload .= 'Content-Disposition: form-data; name="file"; filename="' . basename($filename);
+            $payload .= "\r\n";
+            $payload .= 'Content-Type: text/plain';
+            $payload .= "\r\n\r\n";
+            $payload .= file_get_contents($filename);
+            $payload .= "\r\n";
+
+        }
+
+        $payload .= '--' . $boundary . '--';
+
+        return $payload;
+    }
+
+    public function export()
+    {
+        $themes = $this->themesWithLanguages();
+
+        $n = 0;
+
+        if (!empty($themes)) {
+            foreach ($themes as $theme) {
+                $group = $this->theme_group($theme['id']);
+                $n += $this->uploadLangFile($theme['lang_file'], $group);
+            }
+        }
+
+        $n += $this->createAbstractions();
+
+        return $n;
+    }
+
+    public function import()
+    {
+        return $this->getTranslations();
+    }
+
+    public function theme_group($theme)
     {
         $parentGroup = array(
             'name' => get_theme_roots(),
@@ -57,6 +145,7 @@ class WbtApi extends WbtAbstract
 
             if (!empty($lang_file)) {
                 $result[$key] = array(
+                    'id' => $key,
                     'name' => $theme,
                     'lang_file' => $lang_file,
                 );
@@ -64,16 +153,6 @@ class WbtApi extends WbtAbstract
         }
 
         return $result;
-    }
-
-    public function export()
-    {
-        return $this->createAbstractions();
-    }
-
-    public function import()
-    {
-        return $this->getTranslations();
     }
 
     public function refresh()
@@ -85,21 +164,6 @@ class WbtApi extends WbtAbstract
                 $this->updatePost($post);
             }
         }
-    }
-
-    public function uploadLangFile($filename, $group = null)
-    {
-        $this->container()->get('client')->remote('/abstractions/upload', array(
-            'method' => 'POST',
-            'headers' => array(
-                'content-type' => 'multipart/form-data',
-            ),
-            'file' => $filename,
-            /*'body' => array(
-                'name' => $key,
-                'value' => $post['post_content'][$default_language],
-            )*/
-        ));
     }
 
     public function getTranslations()

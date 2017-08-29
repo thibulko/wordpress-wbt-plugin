@@ -64,9 +64,10 @@ class WbtAdmin extends WbtAbstract
     public function dashboard($data = [])
     {
         return array_merge($data, array(
-            'wbt_languages' => $this->container()->get('config')->getLanguages(),
-            'api_key' => $this->container()->get('config')->getOption('api_key'),
-            'themes' => $this->container()->get('api')->themesWithLanguages(),
+            'wbt_default_language' => $this->container()->get('config')->getOption('default_language'),
+            'wbt_languages' => $this->container()->get('config')->getOption('languages'),
+            'wbt_api_key' => $this->container()->get('config')->getOption('api_key'),
+            'wbt_themes' => $this->container()->get('api')->themesWithLanguages(),
         ));
     }
     
@@ -104,8 +105,6 @@ class WbtAdmin extends WbtAbstract
     
     public function add_api_key()
     {
-        $languages = $this->container()->get('config')->getLanguages();
-        $api_key = $this->container()->get('config')->getOption('api_key');
         $messages = array();
         
         if (( !empty($_POST['api_key']) )) {
@@ -115,16 +114,14 @@ class WbtAdmin extends WbtAbstract
                 $this->container()->get('config')->setApiKey($api_key);
                 $this->container()->get('api')->init();
                 $messages['success'] = array('Key was added');
-                $languages = $this->container()->get('config')->getLanguages();
             } catch (\Exception $e) {
                 $messages['errors'] = array($e->getMessage());
             }
         }
         
-        return array(
-            'wbt_languages' => $languages,
-            'api_key' => $api_key,
+        return $this->dashboard(array(
+            'api_key' => $this->container()->get('config')->getOption('api_key'),
             'messages' => $messages,
-        );
+        ));
     }
 }

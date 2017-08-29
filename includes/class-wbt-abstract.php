@@ -146,9 +146,11 @@ class WbtAbstract
     public function log($data)
     {
         if (is_array($data)) {
-            print "<pre>" . print_r($data, true) . "</pre>";
+            $str = print_r($data, true);
         } else {
-            print $data . PHP_EOL;
+            $str = $data . PHP_EOL;
         }
+
+        print  "<pre>$str</pre>";
     }
 }
