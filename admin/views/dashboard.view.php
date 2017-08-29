@@ -81,7 +81,7 @@
                     <td>
                         <ul>
                             <li>
-                                <label>Themes</label>
+                                <label><input type="checkbox" <?php if (empty($themes)): ?>disabled="disabled"<?php endif; ?>> Themes</label>
                                 <ul style="margin-left: 25px;">
                                     <?php foreach($themes as $theme): ?>
                                         <li><label><input type="checkbox"> <?php print $theme['name']; ?></label></li>
