@@ -2,18 +2,18 @@
 <div class="wrap">
     <?php if(!empty($messages)): ?>
         <?php if(!empty($messages['errors'])): ?>
-            <?php foreach($messages['errors'] as $error): ?>
-                <div class="error settings-error notice is-dismissible">
+            <div class="error settings-error notice is-dismissible">
+                <?php foreach($messages['errors'] as $error): ?>
                     <p><strong><?php echo $error; ?></strong></p>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
         <?php if(!empty($messages['success'])): ?>
-            <?php foreach($messages['success'] as $success): ?>
-                <div class="updated settings-error notice is-dismissible">
+            <div class="updated settings-error notice is-dismissible">
+                <?php foreach($messages['success'] as $success): ?>
                     <p><strong><?php echo $success; ?></strong></p>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
     <?php endif; ?>
 
@@ -27,26 +27,22 @@
                 <td>
                     <ul>
                         <li>
-                            <label><input type="checkbox" name="themes" <?php if (empty($wbt_themes)): ?>disabled="disabled"<?php endif; ?>> Themes</label>
-                            <?php if (!empty($wbt_themes)): ?>
-                                <ul style="margin-left: 25px;">
-                                    <?php foreach($wbt_themes as $theme): ?>
-                                        <li><label><input type="checkbox" name="theme[<?php print $theme['id'] ?>"> <?php print $theme['name']; ?></label></li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            <?php endif; ?>
+                            <label>
+                                <input type="checkbox" name="types[]" value="<?php print WbtAdmin::TYPE_THEME; ?>" <?php if(in_array(WbtAdmin::TYPE_THEME, $types)): ?>checked="checked"<?php endif; ?>>
+                                Theme (<?php print wp_get_theme(); ?>)
+                            </label>
                         </li>
                         <li>
-                            <label><input type="checkbox" name="posts"> Posts</label>
+                            <label>
+                                <input type="checkbox" name="types[]" value="<?php print WbtAdmin::TYPE_POSTS; ?>" <?php if(in_array(WbtAdmin::TYPE_POSTS, $types)): ?>checked="checked"<?php endif; ?>>
+                                Posts, Pages
+                            </label>
                         </li>
                         <li>
-                            <label><input type="checkbox" name="pages"> Pages</label>
-                        </li>
-                        <li>
-                            <label><input type="checkbox" name="categories"> Categories</label>
-                        </li>
-                        <li>
-                            <label><input type="checkbox" name="tags"> Tags</label>
+                            <label>
+                                <input type="checkbox" name="types[]" value="<?php print WbtAdmin::TYPE_TERMS; ?>" <?php if(in_array(WbtAdmin::TYPE_TERMS, $types)): ?>checked="checked"<?php endif; ?>>
+                                Categories, Tags
+                            </label>
                         </li>
                     </ul>
                 </td>

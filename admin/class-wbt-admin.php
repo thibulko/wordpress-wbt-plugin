@@ -23,15 +23,19 @@ class WbtAdmin extends WbtAbstract
                 break;
 
             case 'add_key':
-                $this->render('dashboard.view.php', 'add_api_key');
+                $this->render('dashboard.view.php', 'initAction');
                 break;
 
             case 'export':
-                $this->render('dashboard.view.php', 'export');
+                $this->render('dashboard.view.php', 'exportAction');
                 break;
 
             case 'import':
-                $this->render('dashboard.view.php', 'import');
+                $this->render('dashboard.view.php', 'importAction');
+                break;
+
+            case 'types':
+                $this->render('dashboard.view.php', 'typesAction');
                 break;
 
             default:
@@ -67,17 +71,19 @@ class WbtAdmin extends WbtAbstract
             'wbt_default_language' => $this->container()->get('config')->getOption('default_language'),
             'wbt_languages' => $this->container()->get('config')->getOption('languages'),
             'wbt_api_key' => $this->container()->get('config')->getOption('api_key'),
-            'wbt_themes' => $this->container()->get('api')->themesWithLanguages(),
+            'types' => $this->container()->get('config')->getOption('types'),
         ));
     }
     
-    public function export()
+    public function exportAction()
     {
         $messages = array();
     
         try {
             $result = $this->container()->get('api')->export();
-            $messages['success'] = array('Export ' . (!empty($result) ? $result : 0) . ' abstract names.');
+            foreach ($result as $k => $v) {
+                $messages['success'][] = "Export: $k - $v";
+            }
         } catch (\Exception $e) {
             $messages['errors'] = array('ERROR Export: ' . $e->getMessage());
         }
@@ -87,7 +93,7 @@ class WbtAdmin extends WbtAbstract
         ));
     }
     
-    public function import()
+    public function importAction()
     {
         $messages = array();
         
@@ -103,7 +109,7 @@ class WbtAdmin extends WbtAbstract
         ));
     }
     
-    public function add_api_key()
+    public function initAction()
     {
         $messages = array();
         
@@ -121,6 +127,21 @@ class WbtAdmin extends WbtAbstract
         
         return $this->dashboard(array(
             'api_key' => $this->container()->get('config')->getOption('api_key'),
+            'messages' => $messages,
+        ));
+    }
+
+    public function typesAction()
+    {
+        $messages = array();
+
+        if (( !empty($_POST['types']) )) {
+            $types = array_values(array_intersect(self::$types, $_POST['types']));
+            $this->container()->get('config')->setOption('types', $types);
+            $messages['success'] = array('Types was updated');
+        }
+
+        return $this->dashboard(array(
             'messages' => $messages,
         ));
     }

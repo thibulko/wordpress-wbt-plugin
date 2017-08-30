@@ -35,6 +35,10 @@ class WbtHttpClient extends WbtAbstract
 
     public function getUrl($endpoint)
     {
+        if (!$this->getApiKey()) {
+            throw new \Exception('API KEy is required!');
+        }
+
         return $this->getBaseUrl() . $this->getApiKey() . '/' . ltrim($endpoint, '/');
     }
     

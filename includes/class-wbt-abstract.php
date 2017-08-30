@@ -2,9 +2,22 @@
 
 class WbtAbstract
 {
+    const DELIMITER = '::';
+
+    const TYPE_THEME = 'theme';
+    const TYPE_POSTS = 'posts';
+    const TYPE_TERMS = 'terms';
+
     protected $container;
 
-    protected $errors;
+    protected $client;
+    protected $config;
+
+    public static $types = array(
+        self::TYPE_THEME,
+        self::TYPE_POSTS,
+        self::TYPE_TERMS,
+    );
 
     public function __construct($container = null)
     {
@@ -23,18 +36,22 @@ class WbtAbstract
         $this->container = $container;
     }
 
-    public function addError($code = null, $message = null, $data = null)
+    public function client()
     {
-        if (null === $this->errors) {
-            $this->errors = new WP_Error();
+        if (null === $this->client) {
+            $this->client = $this->container()->get('client');
         }
 
-        $this->errors->add($code, $message, $data);
+        return $this->client;
     }
 
-    public function getErrors()
+    public function config()
     {
-        return $this->errors;
+        if (null === $this->config) {
+            $this->config = $this->container()->get('config');
+        }
+
+        return $this->config;
     }
 
     public function getPosts()
