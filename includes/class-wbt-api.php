@@ -49,8 +49,14 @@ class WbtApi extends WbtAbstract
         $types = $this->config()->getOption('types');
 
         if (!empty($types)) {
+            // Posts
             if (in_array(self::TYPE_POSTS, $types)) {
-                //$this->get_posts_data();
+                $result[self::TYPE_POSTS] = $this->update_posts();
+            }
+
+            // Terms
+            if (in_array(self::TYPE_TERMS, $types)) {
+                $result[self::TYPE_TERMS] = $this->update_terms();
             }
         }
 
@@ -274,16 +280,83 @@ class WbtApi extends WbtAbstract
      *  ================= Import =================
      */
 
-    protected function get_posts_data()
+    protected function update_posts()
     {
         $data = $this->client()->remote('/translations?group_name=' . self::TYPE_POSTS);
 
-        $result = array();
+        $result = 0;
 
-        if (!empty($data)) {
-            foreach ($data as $v) {
-                if (!empty($v['translations'])) {
+        if (!empty($data['data'])) {
+            foreach ($data['data'] as $v) {
+                list($type, $id) = explode(self::DELIMITER, $v['abstract_name']);
 
+                if (!empty($id)) {
+                    $post = $this->getPost($id);
+
+                    if (!empty($post)) {
+                        if (!empty($v['translations'])) {
+                            foreach ($v['translations'] as $translation) {
+                                $n = 0;
+
+                                // Content
+                                if ($type == 'title') {
+                                    if (isset($post['post_title'][$translation['language']])) {
+                                        $post['post_title'][$translation['language']] = $translation['value'];
+                                        if ($this->updatePost($post)) {
+                                            $n = 1;
+                                        }
+                                    }
+                                }
+
+                                // Title
+                                if ($type == 'content') {
+                                    if (isset($post['post_content'][$translation['language']])) {
+                                        $post['post_content'][$translation['language']] = $translation['value'];
+                                        if ($this->updatePost($post)) {
+                                            $n = 1;
+                                        }
+                                    }
+                                }
+
+                                $result += $n;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    protected function update_terms()
+    {
+        $data = $this->client()->remote('/translations?group_name=' . self::TYPE_TERMS);
+
+        $result = 0;
+
+        if (!empty($data['data'])) {
+            foreach ($data['data'] as $v) {
+                list($type, $id) = explode(self::DELIMITER, $v['abstract_name']);
+
+                if (!empty($id)) {
+                    $item = $this->getTerm($id);
+
+                    if (!empty($item)) {
+                        if (!empty($v['translations'])) {
+                            foreach ($v['translations'] as $translation) {
+                                // Term name
+                                if ($type == 'name') {
+                                    if (isset($item['name'][$translation['language']])) {
+                                        $item['name'][$translation['language']] = $translation['value'];
+                                        if ($this->updateTerm($item)) {
+                                            $result++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

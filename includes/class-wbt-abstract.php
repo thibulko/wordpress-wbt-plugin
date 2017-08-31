@@ -124,7 +124,7 @@ class WbtAbstract
         }
 
         if (!empty($data)) {
-            $db->update($db->prefix . 'terms', $data, $where);
+            return $db->update($db->prefix . 'terms', $data, $where);
         }
     }
 
@@ -157,7 +157,7 @@ class WbtAbstract
             $row['post_content'] = $translator->join($row['post_content']);
         }
 
-        wp_update_post( $row );
+        return wp_update_post( $row );
     }
 
     public function log($data)

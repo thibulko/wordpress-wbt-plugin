@@ -99,7 +99,9 @@ class WbtAdmin extends WbtAbstract
         
         try {
             $result = $this->container()->get('api')->import();
-            $messages['success'] = array('Import ' . (!empty($result) ? $result : 0) . ' translation values.');
+            foreach ($result as $k => $v) {
+                $messages['success'][] = "Import: $k - $v";
+            }
         } catch (\Exception $e) {
             $messages['errors'] = array('ERROR Import: ' . $e->getMessage());
         }
