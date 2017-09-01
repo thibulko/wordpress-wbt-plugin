@@ -11,8 +11,8 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-//define('WBT_API_URL', 'http://wbtranslator.com/api/project/');
-define('WBT_API_URL', 'http://wbt.dev:8080/api/project/');
+define('WBT_API_URL', 'http://wbtranslator.com/api/project/');
+//define('WBT_API_URL', 'http://wbt.dev:8080/api/project/');
 
 /**
  * Begins execution of the plugin.

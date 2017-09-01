@@ -67,11 +67,13 @@ class WbtAdmin extends WbtAbstract
 
     public function dashboard($data = [])
     {
+        $types = $this->container()->get('config')->getOption('types');
+
         return array_merge($data, array(
             'wbt_default_language' => $this->container()->get('config')->getOption('default_language'),
             'wbt_languages' => $this->container()->get('config')->getOption('languages'),
             'wbt_api_key' => $this->container()->get('config')->getOption('api_key'),
-            'types' => $this->container()->get('config')->getOption('types'),
+            'types' => (!empty($types) ? $types : array()),
         ));
     }
     
