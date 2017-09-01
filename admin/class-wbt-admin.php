@@ -59,10 +59,6 @@ class WbtAdmin extends WbtAbstract
         }else{
             exit('Template not found!');
         }
-
-        if (is_wp_error($this->getErrors())) {
-            var_dump($this->getErrors());
-        }
     }
 
     public function dashboard($data = [])
