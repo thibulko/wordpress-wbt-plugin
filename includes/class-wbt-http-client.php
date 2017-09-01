@@ -54,16 +54,26 @@ class WbtHttpClient extends WbtAbstract
 
         if (200 != $code) {
             if (!empty($body['message'])) {
-                if (is_array($body['message'])) {
-                    $mesg = reset($body['message']);
-                } else {
-                    $mesg = $body['message'];
-                }
+                $mesg = $this->toString($body['message']);
             }
+
             throw new \Exception((!empty($mesg) ? $mesg : 'Unknown error!'), $code);
         }
         
         return $body;
+    }
+
+    public function toString($mesg)
+    {
+        if (is_string($mesg)) {
+            return $mesg;
+        }
+
+        if (is_array($mesg)) {
+            $mesg = reset($mesg);
+        }
+
+        return $this->toString($mesg);
     }
 
     public static function normalize_multipart_params($data)

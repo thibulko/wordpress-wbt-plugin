@@ -49,19 +49,31 @@ class WbtApi extends WbtAbstract
         $types = $this->config()->getOption('types');
 
         if (!empty($types)) {
+            // Theme
+            if (in_array(self::TYPE_THEME, $types)) {
+                $result[self::TYPE_THEME] = $this->update_theme();
+            }
+
             // Posts
             if (in_array(self::TYPE_POSTS, $types)) {
-                $result[self::TYPE_POSTS] = $this->update_posts();
+                try {
+                    $result[self::TYPE_POSTS] = $this->update_posts();
+                } catch (\Exception $e) {
+                    $result[self::TYPE_POSTS] = 0;
+                }
             }
 
             // Terms
             if (in_array(self::TYPE_TERMS, $types)) {
-                $result[self::TYPE_TERMS] = $this->update_terms();
+                try {
+                    $result[self::TYPE_TERMS] = $this->update_terms();
+                } catch (\Exception $e) {
+                    $result[self::TYPE_TERMS] = 0;
+                }
             }
         }
 
         return $result;
-        //return $this->getTranslations();
     }
 
     public function refresh()
@@ -100,7 +112,7 @@ class WbtApi extends WbtAbstract
             'Cache-Control' => 'no-cache',
         );
 
-        $payload = $this->create_payload($boundary, $theme['lang_file'], $params);
+        $payload = $this->create_payload($boundary, $theme['default_lang_file'], $params);
 
         $body = $this->client()->remote('/abstractions/upload', array(
             'method' => 'POST',
@@ -173,7 +185,7 @@ class WbtApi extends WbtAbstract
     protected function theme_group($theme)
     {
         $parentGroup = array(
-            'name' => trim(get_theme_roots(), DIRECTORY_SEPARATOR),
+            'name' => self::TYPE_THEME,
         );
 
         $group = array(
@@ -184,15 +196,17 @@ class WbtApi extends WbtAbstract
         return $group;
     }
 
-    protected function current_theme()
+    protected function current_theme($language_code = null)
     {
         $theme = wp_get_theme();
         $TextDomain = $theme->get('TextDomain');
 
-        $default_language = $this->config()->getOption('default_language');
+        if (null === $language_code) {
+            $default_language = $this->config()->getOption('default_language');
 
-        if (!empty($default_language['code']) && (strlen($default_language['code']) == 2)) {
-            $language_code = strtolower($default_language['code']) . '_' . strtoupper($default_language['code']);
+            if (!empty($default_language['code']) && (strlen($default_language['code']) == 2)) {
+                $language_code = $default_language['code'];
+            }
         }
 
         $language_path = $theme->theme_root . DIRECTORY_SEPARATOR . $TextDomain . DIRECTORY_SEPARATOR . 'languages';
@@ -209,7 +223,8 @@ class WbtApi extends WbtAbstract
             return array(
                 'id' => $TextDomain,
                 'name' => (string) $theme,
-                'lang_file' => $lang_file,
+                'default_lang_file' => $lang_file,
+                'lang_path' => $language_path,
                 'group' => $this->theme_group($TextDomain),
             );
         }
@@ -364,66 +379,25 @@ class WbtApi extends WbtAbstract
         return $result;
     }
 
-    /*protected function getTranslations()
+    protected function update_theme()
     {
-        $wp_tasks = $this->container()->get('config')->getOption('abstractions');
+        $theme = $this->current_theme();
 
-        $cnt = 0;
+        if (empty($theme['id'])) {
+            return false;
+        }
 
-        $data = $this->container()->get('client')->remote('/translations');
+        $languages = $this->config()->getOption('languages');
 
-        if (!empty($data['data'])) {
-            $abstractions = [];
-            foreach ($data['data'] as $d) {
-                $abstractions[$d['abstract_name']][$d['language']] = $d['original_value'];
-
-                if (!empty($d['translations'])) {
-                    foreach ($d['translations'] as $trans) {
-                        $abstractions[$d['abstract_name']][$trans['language']] = $trans['value'];
-                    }
-                }
-            }
-
-            if (!empty($abstractions)) {
-                foreach ($abstractions as $k => $languages) {
-                    if (!empty($wp_tasks[$k])) {
-                        $task = $wp_tasks[$k];
-
-                        foreach($languages as $language => $translation) {
-                            switch ($task['type']) {
-                                case 'post_title':
-                                    $item = $this->getPost($task['id']);
-                                    if (isset($item['post_title'][$language])) {
-                                        $item['post_title'][$language] = $translation;
-                                        $this->updatePost($item);
-                                        $cnt++;
-                                    }
-                                    break;
-
-                                case 'post_content':
-                                    $item = $this->getPost($task['id']);
-                                    if (isset($item['post_content'][$language])) {
-                                        $item['post_content'][$language] = $translation;
-                                        $this->updatePost($item);
-                                        $cnt++;
-                                    }
-                                    break;
-
-                                case 'term_name':
-                                    $item = $this->getTerm($task['id']);
-                                    if (isset($item['name'][$language])) {
-                                        $item['name'][$language] = $translation;
-                                        $this->updateTerm($item);
-                                        $cnt++;
-                                    }
-                                    break;
-                            }
-                        }
-                    }
-                }
+        if (!empty($languages)) {
+            foreach ($languages as $language) {
+                $this->client()->remote('/export?format=gettext&group=' . $theme['id'] . '&language=' . $language['code'], array(
+                    'stream' => true,
+                    'filename' => $theme['lang_path'] . DIRECTORY_SEPARATOR . $language['code'] . '.po',
+                ));
             }
         }
 
-        return $cnt;
-    }*/
+        return 'OK';
+    }
 }
