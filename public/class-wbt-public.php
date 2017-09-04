@@ -1,6 +1,6 @@
 <?php
 
-class FwtPublic extends FwtAbstract
+class WbtPublic extends WbtAbstract
 {
     public function the_content($content)
     {

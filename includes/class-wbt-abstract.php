@@ -1,10 +1,23 @@
 <?php
 
-class FwtAbstract
+class WbtAbstract
 {
+    const DELIMITER = '::';
+
+    const TYPE_THEME = 'theme';
+    const TYPE_POSTS = 'posts';
+    const TYPE_TERMS = 'terms';
+
     protected $container;
 
-    protected $errors;
+    protected $client;
+    protected $config;
+
+    public static $types = array(
+        self::TYPE_THEME,
+        self::TYPE_POSTS,
+        self::TYPE_TERMS,
+    );
 
     public function __construct($container = null)
     {
@@ -23,18 +36,22 @@ class FwtAbstract
         $this->container = $container;
     }
 
-    public function addError($code = null, $message = null, $data = null)
+    public function client()
     {
-        if (null === $this->errors) {
-            $this->errors = new WP_Error();
+        if (null === $this->client) {
+            $this->client = $this->container()->get('client');
         }
 
-        $this->errors->add($code, $message, $data);
+        return $this->client;
     }
 
-    public function getErrors()
+    public function config()
     {
-        return $this->errors;
+        if (null === $this->config) {
+            $this->config = $this->container()->get('config');
+        }
+
+        return $this->config;
     }
 
     public function getPosts()
@@ -107,7 +124,7 @@ class FwtAbstract
         }
 
         if (!empty($data)) {
-            $db->update($db->prefix . 'terms', $data, $where);
+            return $db->update($db->prefix . 'terms', $data, $where);
         }
     }
 
@@ -140,15 +157,17 @@ class FwtAbstract
             $row['post_content'] = $translator->join($row['post_content']);
         }
 
-        wp_update_post( $row );
+        return wp_update_post( $row );
     }
 
     public function log($data)
     {
         if (is_array($data)) {
-            print "<pre>" . print_r($data, true) . "</pre>";
+            $str = print_r($data, true);
         } else {
-            print $data . PHP_EOL;
+            $str = $data . PHP_EOL;
         }
+
+        print  "<pre>$str</pre>";
     }
 }

@@ -1,18 +1,11 @@
 <?php
 
-class FwtConfig extends FwtAbstract
+class WbtConfig extends WbtAbstract
 {
-    const OPTION_NAME = 'fwt_project_params';
+    const OPTION_NAME = 'wbt_options';
 
-    const VERSION = '0.0.1';
-
-    const PLUGIN_NAME = 'fwt';
-
-    public function getVersion()
-    {
-        return self::VERSION;
-    }
-
+    const PLUGIN_NAME = 'wbt';
+    
     public function getPluginName()
     {
         return self::PLUGIN_NAME;
@@ -63,5 +56,15 @@ class FwtConfig extends FwtAbstract
         }
 
         return $result;
+    }
+    
+    public function getApiKey()
+    {
+        return $this->getOption('api_key');
+    }
+    
+    public function setApiKey($api_key)
+    {
+        return $this->setOption('api_key', $api_key);
     }
 }
