@@ -46,12 +46,12 @@ class WbtConfig extends WbtAbstract
         $languages = $this->getOption('languages');
 
         if (!empty($default_language)) {
-            $result[$default_language['id']] = $default_language;
+            $result[$default_language['code']] = $default_language;
         }
 
         if (!empty($languages)) {
             foreach ($languages as $language) {
-                $result[$language['id']] = $language;
+                $result[$language['code']] = $language;
             }
         }
 
