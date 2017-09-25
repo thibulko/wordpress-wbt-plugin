@@ -8,7 +8,7 @@ class WbtApi extends WbtAbstract
     {
         $project = $this->client()->remote('/');
 
-        if (!empty($project['data']['id'])) {
+        if (!empty($project['data'])) {
             $config = $this->container()->get('config');
             $config->setOption('default_language', isset($project['data']['language']) ? $project['data']['language'] : []);
             $config->setOption('languages', isset($project['data']['languages']) ? $project['data']['languages'] : []);
