@@ -57,10 +57,19 @@ class WbtHttpClient extends WbtAbstract
                 $mesg = $this->toString($body['message']);
             }
 
-            throw new \Exception((!empty($mesg) ? $mesg : 'Unknown error!'), $code);
+            $this->handleError($mesg, $code);
         }
-        
+
+        if (is_wp_error($request)) {
+            $this->handleError($request->get_error_message(), $code);
+        }
+
         return $body;
+    }
+
+    public function handleError($mesg, $code = 0)
+    {
+        throw new \Exception((!empty($mesg) ? $this->toString($mesg) : 'Unknown error!'), $code);
     }
 
     public function toString($mesg)

@@ -15,7 +15,7 @@ class WbtApi extends WbtAbstract
             $config->setOption('updated_at', time());
             //$config->setOption('abstractions', []);
 
-            $this->refresh();
+            //$this->refresh();
         }
     }
 

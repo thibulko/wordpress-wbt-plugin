@@ -3,7 +3,7 @@
  * The plugin bootstrap file
  *
  * Plugin Name: WBTranslator
- * Version: 0.0.2
+ * Version: 0.1.0
 */
 
 // If this file is called directly, abort.
@@ -11,8 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-define('WBT_API_URL', 'http://wbtranslator.com/api/project/');
-//define('WBT_API_URL', 'http://wbt.dev:8080/api/project/');
+define('WBT_API_URL', 'http://stage.wbtranslator.com/api/project/');
 
 /**
  * Begins execution of the plugin.
