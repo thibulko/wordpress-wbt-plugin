@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-define('WBT_API_URL', 'http://stage.wbtranslator.com/api/project/');
+define('WBT_API_URL', 'http://wbtranslator.com/api/project/');
 
 /**
  * Begins execution of the plugin.
