@@ -72,11 +72,11 @@ class WbtAdmin extends WbtAbstract
             'types' => (!empty($types) ? $types : array()),
         ));
     }
-    
+
     public function exportAction()
     {
         $messages = array();
-    
+
         try {
             $result = $this->container()->get('api')->export();
             foreach ($result as $k => $v) {
@@ -85,34 +85,43 @@ class WbtAdmin extends WbtAbstract
         } catch (\Exception $e) {
             $messages['errors'] = array('ERROR Export: ' . $e->getMessage());
         }
-    
+
         return $this->dashboard(array(
             'messages' => $messages,
         ));
     }
-    
+
     public function importAction()
     {
         $messages = array();
-        
-        try {
-            $result = $this->container()->get('api')->import();
-            foreach ($result as $k => $v) {
-                $messages['success'][] = "Import: $k - $v";
+        $remote = $this->client()->remote('/');
+
+        if (!empty($remote['data']['languages'])) {
+            try {
+                $result = $this->container()->get('api')->import();
+
+                foreach ($result as $k => $v) {
+                    $message_type = ($v) ? 'success' : 'errors';
+
+                    $messages[$message_type][] = "Import: $k - $v";
+
+                }
+            } catch (\Exception $e) {
+                $messages['errors'] = array('ERROR Import: ' . $e->getMessage());
             }
-        } catch (\Exception $e) {
-            $messages['errors'] = array('ERROR Import: ' . $e->getMessage());
+        } else {
+            $messages['errors'] = array('You need to add the languages to translate into in your wbtranslator.com dashboard.');
         }
-        
+
         return $this->dashboard(array(
             'messages' => $messages,
         ));
     }
-    
+
     public function initAction()
     {
         $messages = array();
-        
+
         if (( !empty($_POST['api_key']) )) {
             $api_key = $_POST['api_key'];
 
@@ -124,7 +133,7 @@ class WbtAdmin extends WbtAbstract
                 $messages['errors'] = array($e->getMessage());
             }
         }
-        
+
         return $this->dashboard(array(
             'api_key' => $this->container()->get('config')->getOption('api_key'),
             'messages' => $messages,
