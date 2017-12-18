@@ -94,23 +94,21 @@ class WbtAdmin extends WbtAbstract
     public function importAction()
     {
         $messages = array();
-        $remote   = $this->client()->remote('/');
 
-        if (!empty($remote['data']['languages'])) {
-            try {
-                $result = $this->container()->get('api')->import();
+        try {
+            $result = $this->container()->get('api')->import();
+            $remote = $this->client()->remote('/');
 
+            if (!empty($remote['data']['languages'])) {
                 foreach ($result as $k => $v) {
-                    $message_type = ($v) ? 'success' : 'errors';
-
-                    $messages[$message_type][] = "Import: $k - $v";
-
+                    $messages['success'][] = "Import: $k - $v";
                 }
-            } catch (\Exception $e) {
-                $messages['errors'] = array('ERROR Import: ' . $e->getMessage());
+            } else {
+                $messages['errors'] = array('You need to add the languages to translate into in your wbtranslator.com dashboard.');
             }
-        } else {
-            $messages['errors'] = array('You need to add the languages to translate into in your wbtranslator.com dashboard.');
+
+        } catch (\Exception $e) {
+            $messages['errors'] = array('ERROR Import: ' . $e->getMessage());
         }
 
         return $this->dashboard(array(
