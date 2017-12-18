@@ -94,7 +94,7 @@ class WbtAdmin extends WbtAbstract
     public function importAction()
     {
         $messages = array();
-        $remote = $this->client()->remote('/');
+        $remote   = $this->client()->remote('/');
 
         if (!empty($remote['data']['languages'])) {
             try {
