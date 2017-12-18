@@ -104,7 +104,7 @@ class WbtAdmin extends WbtAbstract
                     $messages['success'][] = "Import: $k - $v";
                 }
             } else {
-                $messages['errors'] = array('You need to add the languages to translate into in your wbtranslator.com dashboard.');
+                throw new Exception('You need to add the languages to translate into in your wbtranslator.com dashboard.');
             }
 
         } catch (\Exception $e) {
