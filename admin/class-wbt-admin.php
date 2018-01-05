@@ -77,10 +77,18 @@ class WbtAdmin extends WbtAbstract
     {
         $messages = array();
 
+        $this->container()->get('api')->init();
+
         try {
             $result = $this->container()->get('api')->export();
-            foreach ($result as $k => $v) {
-                $messages['success'][] = "Export: $k - $v";
+            $remote = $this->client()->remote('/');
+
+            if (!empty($remote['data']['languages'])) {
+                foreach ($result as $k => $v) {
+                    $messages['success'][] = "Export: $k - $v";
+                }
+            } else {
+                throw new Exception('You need to add the languages to translate into in your wbtranslator.com dashboard.');
             }
         } catch (\Exception $e) {
             $messages['errors'] = array('ERROR Export: ' . $e->getMessage());
@@ -94,6 +102,8 @@ class WbtAdmin extends WbtAbstract
     public function importAction()
     {
         $messages = array();
+
+        $this->container()->get('api')->init();
 
         try {
             $result = $this->container()->get('api')->import();
