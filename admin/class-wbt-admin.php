@@ -38,6 +38,10 @@ class WbtAdmin extends WbtAbstract
                 $this->render('dashboard.view.php', 'typesAction');
                 break;
 
+            case 'refresh':
+                $this->render('dashboard.view.php', 'refreshAction');
+                break;
+
             default:
                 $this->render('dashboard');
                 break;
@@ -162,4 +166,17 @@ class WbtAdmin extends WbtAbstract
             'messages' => $messages,
         ));
     }
+
+    public function refreshAction()
+    {
+        $this->container()->get('api')->init();
+
+        $messages['success'] = array('Data was refreshed');
+
+        return $this->dashboard(array(
+            'messages' => $messages,
+        ));
+    }
+
+
 }

@@ -66,7 +66,10 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td><button class="button button-primary">Add</button></td>
+                    <td>
+                        <button class="button button-primary">Add</button>
+                        <button class="button button-primary" formaction="?page=wbt-settings&action=refresh">Refresh</button>
+                    </td>
                 </tr>
                 <tr>
                     <th>Default Language</th>
